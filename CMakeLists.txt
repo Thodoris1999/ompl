@@ -169,8 +169,7 @@ if(OMPL_BUILD_NANOBIND AND PYTHON_FOUND)
     message(STATUS "Python version: ${PYTHON_VERSION}")
     message(STATUS "Python executable: ${PYTHON_EXEC}")
 
-    find_package(Python COMPONENTS Interpreter Development REQUIRED)
-    add_subdirectory(external/nanobind)
+    find_package(Nanobind REQUIRED)
     add_subdirectory(nanobinds)
 endif()
 
