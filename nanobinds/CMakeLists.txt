@@ -45,6 +45,18 @@ nanobind_add_stub(
         ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl/util.pyi
 )
 
+# Post-process .pyi files to fix imports: replace "import _ompl.X" with "from ompl import _ompl"
+# This allows references like "_ompl.base.State" to continue working
+add_custom_command(
+    TARGET ompl_stub POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E echo "Fixing imports in generated .pyi files..."
+    COMMAND find ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl -name "*.pyi" -exec
+        sed -i -E "/^import _ompl\\./d" {} +
+    COMMAND find ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl -name "*.pyi" -exec
+        sed -i "1i import ompl as _ompl" {} +
+    COMMENT "Post-processing .pyi stubs to use 'import ompl as _ompl'"
+)
+
 install(TARGETS _ompl DESTINATION ompl)
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl
         DESTINATION ompl
