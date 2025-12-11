@@ -7,11 +7,6 @@ nanobind_add_module(_ompl
     ${PY_OMPL_SOURCES}
 )
 
-# If a non-standard CMAKE_LIBRARY_OUTPUT_DIRECTORY is defined (for example, by
-# the wheel build system), place the shared library artifact underneath it as
-# `ompl/_ompl.so`.
-#
-# Otherwise, do the same but relative to the default library output path.
 if (DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY)
     set_target_properties(_ompl PROPERTIES LIBRARY_OUTPUT_DIRECTORY
         "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/ompl")
@@ -21,6 +16,18 @@ endif()
 
 target_link_libraries(_ompl PRIVATE ompl::ompl)
 target_compile_options(_ompl PRIVATE -Wno-unused-parameter)
+
+# Set RPATH so the module can find libompl.so at runtime during development
+set_target_properties(_ompl PROPERTIES
+    BUILD_RPATH "$<TARGET_FILE_DIR:ompl>"
+    INSTALL_RPATH "$ORIGIN;$ORIGIN/../lib"
+)
+
+if (DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY)
+    install(TARGETS ompl
+        LIBRARY DESTINATION "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/lib"
+    )
+endif()
 
 file(COPY ompl DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -33,6 +40,8 @@ nanobind_add_stub(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ompl/ompl.pyi
     PYTHON_PATH $<TARGET_FILE_DIR:_ompl>
     DEPENDS _ompl
+    VERBOSE
+    MARKER_FILE py.typed
 )
 
 install(TARGETS _ompl DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/ompl)
