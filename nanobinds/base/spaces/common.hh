@@ -54,14 +54,6 @@ inline ob::ScopedState<> state2ScopedState(ob::StateSpacePtr space, const ob::St
         {
             return ob::ScopedState<ob::TimeStateSpace>(space, s);
         }
-        case ob::STATE_SPACE_SPACE_TIME:
-        {
-            return ob::ScopedState<ob::SpaceTimeStateSpace>(space, s);
-        }
-        case ob::STATE_SPACE_CONSTRAINED:
-        {
-            return ob::ScopedState<ob::ConstrainedStateSpace>(space, s);
-        }
        
         default:
 
