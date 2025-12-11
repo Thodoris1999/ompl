@@ -23,12 +23,6 @@ set_target_properties(_ompl PROPERTIES
     INSTALL_RPATH "$ORIGIN;$ORIGIN/../lib"
 )
 
-if (DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY)
-    install(TARGETS ompl
-        LIBRARY DESTINATION "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/lib"
-    )
-endif()
-
 file(COPY ompl DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 # ---------------------------------------------------------------------
@@ -37,12 +31,22 @@ file(COPY ompl DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 nanobind_add_stub(
     ompl_stub
     MODULE _ompl
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ompl/ompl.pyi
     PYTHON_PATH $<TARGET_FILE_DIR:_ompl>
     DEPENDS _ompl
     VERBOSE
     MARKER_FILE py.typed
+    RECURSIVE                                
+    OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR}/ompl 
+    OUTPUT                                      
+        ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl/__init__.pyi
+        ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl/base.pyi
+        ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl/geometric.pyi
+        ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl/control.pyi
+        ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl/util.pyi
 )
 
-install(TARGETS _ompl DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/ompl)
+install(TARGETS _ompl DESTINATION ompl)
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl
+        DESTINATION ompl
+        FILES_MATCHING PATTERN "*.pyi")
 # install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ompl DESTINATION ${OMPL_PYTHON_INSTALL_DIR})
