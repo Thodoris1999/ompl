@@ -61,4 +61,11 @@ install(TARGETS _ompl DESTINATION ompl)
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl
         DESTINATION ompl
         FILES_MATCHING PATTERN "*.pyi")
+install(FILES 
+        ${CMAKE_CURRENT_SOURCE_DIR}/ompl/__init__.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/ompl/base.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/ompl/geometric.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/ompl/control.py
+        ${CMAKE_CURRENT_SOURCE_DIR}/ompl/util.py
+        DESTINATION ompl)
 # install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ompl DESTINATION ${OMPL_PYTHON_INSTALL_DIR})
