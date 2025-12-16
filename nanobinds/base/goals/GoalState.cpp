@@ -19,10 +19,8 @@ void ompl::binding::base::initGoals_GoalState(nb::module_& m)
              "Return the distance from the given state to the goal state")
         .def("print", [](const ob::GoalState &self) { self.print(std::cout); },
              "Print a representation of this GoalState to stdout")
-        .def("setState", nb::overload_cast<const ob::State *>(&ob::GoalState::setState), nb::arg("state"),
+       .def("setState", nb::overload_cast<const ob::State *>(&ob::GoalState::setState), nb::arg("state"),
              "Set the target goal state from a raw State pointer")
-        .def("setState", nb::overload_cast<const ob::ScopedState<> &>(&ob::GoalState::setState), nb::arg("state"),
-             "Set the target goal state from a ScopedState<>")
         .def("getState", nb::overload_cast<>(&ob::GoalState::getState, nb::const_),
              nb::rv_policy::reference_internal,
              "Get the stored goal state (const)")

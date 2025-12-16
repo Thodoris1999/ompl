@@ -8,18 +8,11 @@
 #include "ompl/base/ProblemDefinition.h"
 #include "ompl/base/SpaceInformation.h"
 #include "ompl/base/State.h"
-#include "ompl/base/ScopedState.h"
 #include "ompl/base/Goal.h"
 #include "ompl/base/OptimizationObjective.h"
 #include "ompl/base/SolutionNonExistenceProof.h"
 #include "ompl/base/spaces/RealVectorStateSpace.h"
 
-#include "ompl/base/spaces/RealVectorStateSpace.h"
-#include "ompl/base/spaces/SE2StateSpace.h"
-#include "ompl/base/spaces/SE3StateSpace.h"
-#include "ompl/base/spaces/SO2StateSpace.h"
-#include "ompl/base/spaces/SO3StateSpace.h"
-#include "./spaces/common.hh"
 #include "init.hh"
 
 namespace nb = nanobind;
@@ -40,9 +33,7 @@ void ompl::binding::base::init_ProblemDefinition(nb::module_ &m)
 
         // addStartState overloads.
         .def("addStartState", nb::overload_cast<const ompl::base::State*>
-             (&ompl::base::ProblemDefinition::addStartState))
-        .def("addStartState", nb::overload_cast<const ompl::base::ScopedState<> &>
-             (&ompl::base::ProblemDefinition::addStartState))
+          (&ompl::base::ProblemDefinition::addStartState))
 
         // hasStartState: note that the function takes an optional unsigned int pointer.
         .def("hasStartState", nb::overload_cast<const ompl::base::State*, unsigned int*>
@@ -83,13 +74,8 @@ void ompl::binding::base::init_ProblemDefinition(nb::module_ &m)
 
         // setGoalState (State* version) with default threshold.
         .def("setGoalState", nb::overload_cast<const ompl::base::State*, double>
-             (&ompl::base::ProblemDefinition::setGoalState),
-             nb::arg("goal"), nb::arg("threshold") = std::numeric_limits<double>::epsilon())
-
-        // setGoalState (ScopedState<> version)
-        .def("setGoalState", nb::overload_cast<const ompl::base::ScopedState<>&, double>
-             (&ompl::base::ProblemDefinition::setGoalState),
-             nb::arg("goal"), nb::arg("threshold") = std::numeric_limits<double>::epsilon())
+          (&ompl::base::ProblemDefinition::setGoalState),
+          nb::arg("goal"), nb::arg("threshold") = std::numeric_limits<double>::epsilon())
 
         // Optimization Objective functions.
         .def("hasOptimizationObjective", &ompl::base::ProblemDefinition::hasOptimizationObjective)

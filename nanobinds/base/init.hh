@@ -21,7 +21,6 @@ namespace ompl::binding::base
     void init_PrecomputedStateSampler(nanobind::module_& m);
     void init_ProblemDefinition(nanobind::module_& m);
     void init_ProjectionEvaluator(nanobind::module_& m);
-    void init_ScopedState(nanobind::module_& m);
     void init_SolutionNonExistenceProof(nanobind::module_& m);
     void init_SpaceInformation(nanobind::module_& m);
     void init_State(nanobind::module_& m);

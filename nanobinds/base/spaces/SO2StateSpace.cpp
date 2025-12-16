@@ -5,7 +5,6 @@
 
 #include "ompl/base/spaces/SO2StateSpace.h"
 #include "../init.hh"
-#include "common.hh"  // Assumes bind_scoped_state_template is defined here
 
 namespace nb = nanobind;
 

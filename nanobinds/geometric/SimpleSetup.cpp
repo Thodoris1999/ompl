@@ -6,28 +6,21 @@
 #include <sstream>
 
 #include "ompl/geometric/SimpleSetup.h"
-#include "ompl/base/ScopedState.h"
 #include "ompl/base/PlannerData.h"
 #include "ompl/base/PlannerTerminationCondition.h"
 #include "ompl/base/Goal.h"
 #include "ompl/base/Planner.h"
 #include "ompl/base/OptimizationObjective.h"
 #include "ompl/geometric/PathGeometric.h"
-#include "ompl/base/ScopedState.h"
 #include "init.hh"
-
-// Scoped State
-#include "ompl/base/spaces/RealVectorStateSpace.h"
-#include "ompl/base/spaces/SE2StateSpace.h"
-#include "ompl/base/spaces/SE3StateSpace.h"
-#include "ompl/base/spaces/SO2StateSpace.h"
-#include "ompl/base/spaces/SO3StateSpace.h"
-
-#include "../base/spaces/common.hh"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;
 namespace og = ompl::geometric;
+
+struct SimpleSetupPublicist : public og::SimpleSetup {
+    using og::SimpleSetup::configured_;
+};
 
 void ompl::binding::geometric::init_SimpleSetup(nb::module_ &m)
 {
@@ -129,11 +122,9 @@ nb::class_<og::SimpleSetup>(m, "SimpleSetup")
      // setStartAndGoalStates, addStartState, etc.
      .def("setStartAndGoalStates",
           [](og::SimpleSetup &ss, const ob::State *start, const ob::State *goal, double threshold) {
-               // Retrieve the state space from the SimpleSetup.
-               auto space = ss.getSpaceInformation()->getStateSpace();
-               auto s = state2ScopedState(space, start);
-               auto g = state2ScopedState(space, goal);
-               ss.setStartAndGoalStates(s, g, threshold);
+               ss.getProblemDefinition()->setStartAndGoalStates(start, goal, threshold);
+               ss.getProblemDefinition()->clearSolutionPaths();
+               static_cast<SimpleSetupPublicist&>(ss).configured_ = false;
           },
           nb::arg("start"), nb::arg("goal"),
           nb::arg("threshold") = std::numeric_limits<double>::epsilon())
@@ -143,25 +134,21 @@ nb::class_<og::SimpleSetup>(m, "SimpleSetup")
 
      .def("addStartState",
           [](og::SimpleSetup &ss, const ob::State * state) {
-               auto space = ss.getSpaceInformation()->getStateSpace();
-               auto s = state2ScopedState(space, state);
-               ss.addStartState(s);
+               ss.getProblemDefinition()->addStartState(state);
           },
           nb::arg("state"))
 
      .def("setStartState",
           [](og::SimpleSetup &ss, const ob::State * state) {
-               auto space = ss.getSpaceInformation()->getStateSpace();
-               auto s = state2ScopedState(space, state);
-               ss.setStartState(s);
+               ss.clearStartStates();
+               ss.getProblemDefinition()->addStartState(state);
           },
           nb::arg("state"))
 
      .def("setGoalState",
           [](og::SimpleSetup &ss, const ob::State * state, double threshold) {
-               auto space = ss.getSpaceInformation()->getStateSpace();
-               auto s = state2ScopedState(space, state);
-               ss.setGoalState(s);
+               ss.getProblemDefinition()->setGoalState(state, threshold);
+               static_cast<SimpleSetupPublicist&>(ss).configured_ = false;
           },
           nb::arg("goal"),
           nb::arg("threshold") = std::numeric_limits<double>::epsilon())        

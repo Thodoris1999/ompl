@@ -4,10 +4,8 @@
 #include <nanobind/stl/vector.h>
 #include <cstring>
 #include <sstream>
-#include "ompl/base/ScopedState.h"
 #include "ompl/base/spaces/RealVectorStateSpace.h"
 #include "../init.hh"
-#include "common.hh"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

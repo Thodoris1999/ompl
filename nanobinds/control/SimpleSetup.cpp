@@ -14,13 +14,16 @@
 #include "ompl/base/PlannerData.h"
 #include "ompl/base/ProblemDefinition.h"
 #include "ompl/base/OptimizationObjective.h"
-#include "../base/spaces/common.hh"
 
 #include "init.hh"
 
 namespace nb = nanobind;
 namespace oc = ompl::control;
 namespace ob = ompl::base;
+
+struct SimpleSetupPublicist : public oc::SimpleSetup {
+    using oc::SimpleSetup::configured_;
+};
 
 void ompl::binding::control::init_SimpleSetup(nb::module_ &m)
 {
@@ -83,21 +86,17 @@ void ompl::binding::control::init_SimpleSetup(nb::module_ &m)
             "setStartAndGoalStates",
             [](oc::SimpleSetup &ss, const ob::State *start, const ob::State *goal, double threshold)
             {
-                // Retrieve the state space from the SimpleSetup.
-                auto space = ss.getSpaceInformation()->getStateSpace();
-                auto s = state2ScopedState(space, start);
-                auto g = state2ScopedState(space, goal);
-                ss.setStartAndGoalStates(s, g, threshold);
+                ss.getProblemDefinition()->setStartAndGoalStates(start, goal, threshold);
+                ss.getProblemDefinition()->clearSolutionPaths();
+                static_cast<SimpleSetupPublicist&>(ss).configured_ = false;
             },
             nb::arg("start"), nb::arg("goal"), nb::arg("threshold") = std::numeric_limits<double>::epsilon())
         .def(
             "setGoalState",
             [](oc::SimpleSetup &ss, const ob::State *goal, double threshold)
             {
-                // Retrieve the state space from the SimpleSetup.
-                auto space = ss.getSpaceInformation()->getStateSpace();
-                auto g = state2ScopedState(space, goal);
-                ss.setGoalState(g, threshold);
+                ss.getProblemDefinition()->setGoalState(goal, threshold);
+                static_cast<SimpleSetupPublicist&>(ss).configured_ = false;
             },
             nb::arg("goal"), nb::arg("threshold") = std::numeric_limits<double>::epsilon())
         .def(
@@ -105,9 +104,7 @@ void ompl::binding::control::init_SimpleSetup(nb::module_ &m)
             [](oc::SimpleSetup &ss, const ob::State *state)
             {
                 // Retrieve the state space from the SimpleSetup.
-                auto space = ss.getSpaceInformation()->getStateSpace();
-                auto s = state2ScopedState(space, state);
-                ss.addStartState(s);
+                ss.getProblemDefinition()->addStartState(state);
             },
             nb::arg("state"))
         .def("clearStartStates", &oc::SimpleSetup::clearStartStates)
@@ -115,10 +112,8 @@ void ompl::binding::control::init_SimpleSetup(nb::module_ &m)
             "setStartState",
             [](oc::SimpleSetup &ss, const ob::State *state)
             {
-                // Retrieve the state space from the SimpleSetup.
-                auto space = ss.getSpaceInformation()->getStateSpace();
-                auto s = state2ScopedState(space, state);
-                ss.setStartState(s);
+                ss.clearStartStates();
+                ss.getProblemDefinition()->addStartState(state);
             },
             nb::arg("state"))
         .def("setGoal", &oc::SimpleSetup::setGoal, nb::arg("goal"))

@@ -23,13 +23,9 @@ void ompl::binding::base::initGoals_GoalStates(nb::module_& m) {
              self.print(std::cout);
          }, "Return a string representation of this GoalStates")
         .def("addState",
-             nb::overload_cast<const ob::State *>(&ob::GoalStates::addState),
-             nb::arg("state"),
+          nb::overload_cast<const ob::State *>(&ob::GoalStates::addState),
+          nb::arg("state"),
              "Add a raw State pointer to the set of goal states")
-        .def("addState",
-             nb::overload_cast<const ob::ScopedState<> &>(&ob::GoalStates::addState),
-             nb::arg("state"),
-             "Add a ScopedState<> to the set of goal states")
         .def("clear", &ob::GoalStates::clear,
              "Remove all stored goal states")
         .def("hasStates", &ob::GoalStates::hasStates,

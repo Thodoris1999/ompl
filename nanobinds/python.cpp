@@ -34,7 +34,6 @@ NB_MODULE(_ompl, m)
     ompl::binding::base::init_PrecomputedStateSampler(base);
     ompl::binding::base::init_ProblemDefinition(base);
     ompl::binding::base::init_ProjectionEvaluator(base);
-    ompl::binding::base::init_ScopedState(base);
     ompl::binding::base::init_SolutionNonExistenceProof(base);
     ompl::binding::base::init_SpaceInformation(base);
     ompl::binding::base::init_State(base);
