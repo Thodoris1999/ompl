@@ -73,5 +73,28 @@ find_program(R_EXEC R)
 set_package_properties(Python PROPERTIES
     URL "https://www.python.org"
     PURPOSE "Used for python bindings.")
-find_package(Python QUIET)
+find_package(Python QUIET COMPONENTS Interpreter Development.Module)
+if (Python_FOUND)
+    set(OMPL_HAVE_PYTHON 1)
+    message(STATUS "Found Python:")
+    message(STATUS "\tPython version: ${Python_VERSION}")
+    message(STATUS "\tPython path: ${Python_EXECUTABLE}")
+else()
+    set(OMPL_HAVE_PYTHON 0)
+endif()
 
+# Nanobind
+set_package_properties(Nanobind PROPERTIES
+    URL "https://github.com/wjakob/nanobind"
+    PURPOSE "Used for building Python bindings.")
+
+if(OMPL_HAVE_PYTHON AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/nanobind/CMakeLists.txt")
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/nanobind)
+    set(OMPL_HAVE_NANOBIND 1)
+    find_package_handle_standard_args(Nanobind
+        REQUIRED_VARS OMPL_HAVE_NANOBIND
+        VERSION_VAR nanobind_VERSION
+    )
+else()
+    set(OMPL_HAVE_NANOBIND 0)
+endif()
