@@ -14,6 +14,9 @@ add_feature_info(OMPL_BUILD_VAMP "${OMPL_BUILD_VAMP}" "Whether to build VAMP sub
 option(VAMP_PORTABLE_BUILD "Build VAMP with portable SIMD settings for distribution (package maintainers)" OFF)
 add_feature_info(VAMP_PORTABLE_BUILD "${VAMP_PORTABLE_BUILD}" "Whether to build VAMP with portable SIMD settings for distribution (package maintainers).")
 
+option(OMPL_BUILD_PYTHON_BINDINGS "Build OMPL Python bindings" OFF)
+add_feature_info(OMPL_BUILD_PYTHON_BINDINGS "${OMPL_BUILD_PYTHON_BINDINGS}" "Whether to build OMPL Python bindings.")
+
 # default to building shared libs except Windows
 if (MSVC)
     option(OMPL_BUILD_SHARED "Build OMPL as a shared library" OFF)
@@ -70,6 +73,14 @@ if(OMPL_BUILD_VAMP)
 else()
     set(OMPL_HAVE_VAMP FALSE CACHE BOOL "Whether VAMP integration is available" FORCE)
     message(STATUS "VAMP integration disabled. Use -DOMPL_BUILD_VAMP=ON to enable.")
+endif()
+
+if(OMPL_BUILD_PYTHON_BINDINGS)
+    if(OMPL_HAVE_NANOBIND)
+        add_subdirectory(nanobinds)
+    else()
+        message(WARNING "OMPL_BUILD_PYTHON_BINDINGS is ON but Nanobind is not found. Use git submodule update --init --recursive to initialize the Nanobind submodule.")
+    endif()
 endif()
 
 enable_testing()
