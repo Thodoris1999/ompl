@@ -47,7 +47,13 @@ void ompl::binding::base::initSpaces_RealVectorStateSpace(nb::module_ &m)
                      }
                  }
                  return result;
-             }, nb::rv_policy::reference_internal)
+             }, nb::rv_policy::reference_internal,
+             "Slice access to state values.\n\n"
+             "WARNING: Open-ended slices like state[:] or state[1:] do NOT work because\n"
+             "StateType does not know its dimension. You must use explicit bounds:\n"
+             "  state[0:dim]  # OK\n"
+             "  state[1:dim]  # OK\n"
+             "  state[:]      # WRONG - returns garbage\n")
         .def("__setitem__",
              [](ob::RealVectorStateSpace::StateType *s, const nb::slice &slice, const std::vector<double> &values) {
                  // Use a large dimension for slice computation (no actual bounds checking)
@@ -62,7 +68,12 @@ void ompl::binding::base::initSpaces_RealVectorStateSpace(nb::module_ &m)
                          s->values[start + i * step] = values[i];
                      }
                  }
-             }, nb::rv_policy::reference_internal);
+             }, nb::rv_policy::reference_internal,
+             "Slice assignment to state values.\n\n"
+             "WARNING: Open-ended slices like state[:] or state[1:] do NOT work because\n"
+             "StateType does not know its dimension. You must use explicit bounds:\n"
+             "  state[0:dim] = [...]  # OK\n"
+             "  state[:]     = [...]  # WRONG\n");
 
     // Bind RealVectorStateSpace
     nb::class_<ob::RealVectorStateSpace, ob::StateSpace>(m, "RealVectorStateSpace")
