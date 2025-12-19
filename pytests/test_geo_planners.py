@@ -5,40 +5,21 @@ from ompl import base as ob
 from ompl import geometric as og
 import time
 
+from geo_env import create_simple_setup
+
+
 def test_rrt_planner():
-    # 1) Create a 2D RealVectorStateSpace
-    space = ob.RealVectorStateSpace(2)
-    bounds = ob.RealVectorBounds(2)
-    bounds.setLow(-1)
-    bounds.setHigh(1)
-    space.setBounds(bounds)
+    # 1) Create SimpleSetup from environment
+    ss = create_simple_setup()
+    si = ss.getSpaceInformation()
 
-    # 2) Create a trivial validity checker that always returns True.
-    # For demonstration, we won't do real collision checks.
-    def is_valid(state):
-        return True
-    
-    si = ob.SpaceInformation(space)
-    si.setStateValidityChecker(is_valid)
-    si.setup()
-
-    # 3) Create a ProblemDefinition with a start and goal state.
-    start = si.allocState()
-    start[0] = -0.5
-    start[1] = -0.5
-    goal = si.allocState()
-    goal[0] = 0.5
-    goal[1] = 0.5
-
-    # 4) Create the RRT planner.
+    # 2) Create the RRT planner.
     # Let's choose addIntermediateStates=True for demonstration.
     rrt_planner = og.RRT(si, True)
-    # 5) Configure some parameters
+    # 3) Configure some parameters
     rrt_planner.setGoalBias(0.1)
     rrt_planner.setRange(0.2)
 
-    ss = og.SimpleSetup(si)
-    ss.setStartAndGoalStates(start, goal)
     ss.setPlanner(rrt_planner)
 
     # Print them out
