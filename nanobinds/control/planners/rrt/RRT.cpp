@@ -8,7 +8,7 @@
 #include "ompl/control/SpaceInformation.h"
 #include "ompl/base/PlannerTerminationCondition.h"
 #include "ompl/base/PlannerData.h"
-#include "../../init.hh"
+#include "../../init.h"
 
 namespace nb = nanobind;
 namespace oc = ompl::control;

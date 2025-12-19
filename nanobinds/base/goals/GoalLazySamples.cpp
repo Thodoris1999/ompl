@@ -5,7 +5,7 @@
 
 #include "ompl/base/goals/GoalStates.h"
 #include "ompl/base/goals/GoalLazySamples.h"
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

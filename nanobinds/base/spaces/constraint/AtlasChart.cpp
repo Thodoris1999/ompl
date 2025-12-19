@@ -5,7 +5,7 @@
 
 #include "ompl/base/spaces/constraint/AtlasChart.h"
 #include "ompl/base/spaces/constraint/AtlasStateSpace.h"
-#include "../../init.hh"
+#include "../../init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

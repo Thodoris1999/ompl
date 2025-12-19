@@ -1,7 +1,7 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/string.h>
 #include "ompl/util/Console.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace om = ompl;

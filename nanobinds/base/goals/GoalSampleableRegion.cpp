@@ -5,7 +5,7 @@
 #include <nanobind/stl/pair.h>
 
 #include "ompl/base/goals/GoalSampleableRegion.h"
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

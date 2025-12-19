@@ -11,7 +11,7 @@
 #include "ompl/control/Control.h"
 #include "ompl/control/StatePropagator.h"
 #include "ompl/base/SpaceInformation.h"  // ensure the base class is included
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

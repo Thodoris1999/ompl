@@ -2,7 +2,7 @@
 #include <nanobind/stl/shared_ptr.h>
 #include "ompl/base/samplers/MinimumClearanceValidStateSampler.h"
 #include "ompl/base/SpaceInformation.h"
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

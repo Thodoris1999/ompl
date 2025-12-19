@@ -6,7 +6,7 @@
 
 #include "ompl/control/PathControl.h"
 #include "ompl/base/OptimizationObjective.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

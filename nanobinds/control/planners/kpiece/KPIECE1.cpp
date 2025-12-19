@@ -2,7 +2,7 @@
 #include <nanobind/stl/shared_ptr.h>
 
 #include "ompl/control/planners/kpiece/KPIECE1.h"
-#include "../../init.hh"
+#include "../../init.h"
 
 namespace nb = nanobind;
 namespace oc = ompl::control;

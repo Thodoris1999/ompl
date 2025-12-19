@@ -1,7 +1,7 @@
-#include "base/init.hh"
-#include "control/init.hh"
-#include "geometric/init.hh"
-#include "util/init.hh"
+#include "base/init.h"
+#include "control/init.h"
+#include "geometric/init.h"
+#include "util/init.h"
 
 #include <nanobind/nanobind.h>
 namespace nb = nanobind;

@@ -1,6 +1,6 @@
 #include <nanobind/nanobind.h>
 #include "ompl/base/TypedStateValidityChecker.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 

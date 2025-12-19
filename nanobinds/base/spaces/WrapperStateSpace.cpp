@@ -7,7 +7,7 @@
 #include "ompl/base/StateSpace.h"
 
 
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

@@ -5,7 +5,7 @@
 #include <cstring>
 #include <sstream>
 #include "ompl/base/spaces/RealVectorStateSpace.h"
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

@@ -1,6 +1,6 @@
 #include <nanobind/nanobind.h>
 #include "ompl/control/SimpleDirectedControlSampler.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace oc = ompl::control;

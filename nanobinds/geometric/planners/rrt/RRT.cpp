@@ -6,7 +6,7 @@
 #include "ompl/base/PlannerData.h"
 #include "ompl/base/PlannerTerminationCondition.h"
 #include "ompl/base/OptimizationObjective.h"
-#include "../../init.hh"
+#include "../../init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

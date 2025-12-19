@@ -6,7 +6,7 @@
 #include <nanobind/stl/map.h>
 #include "ompl/base/StateSpace.h"
 #include <sstream>
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

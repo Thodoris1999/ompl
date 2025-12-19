@@ -1,6 +1,6 @@
 #include <nanobind/nanobind.h>
 #include "ompl/geometric/planners/cforest/CForestStateSampler.h"
-#include "../../init.hh"
+#include "../../init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

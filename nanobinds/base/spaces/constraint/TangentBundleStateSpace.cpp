@@ -1,7 +1,7 @@
 #include <nanobind/nanobind.h>
 #include "ompl/base/spaces/constraint/TangentBundleStateSpace.h"
 #include <nanobind/stl/shared_ptr.h>
-#include "../../init.hh"
+#include "../../init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

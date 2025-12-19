@@ -4,7 +4,7 @@
 
 #include "ompl/base/spaces/constraint/ProjectedStateSpace.h"
 #include "ompl/base/Constraint.h"
-#include "../../init.hh"
+#include "../../init.h"
 
 namespace nb  = nanobind;
 namespace ob  = ompl::base;

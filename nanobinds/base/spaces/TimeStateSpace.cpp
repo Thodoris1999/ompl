@@ -3,7 +3,7 @@
 #include <nanobind/stl/string.h>
 #include <sstream>
 #include "ompl/base/spaces/TimeStateSpace.h"
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 

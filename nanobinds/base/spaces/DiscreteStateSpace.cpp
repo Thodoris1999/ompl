@@ -4,7 +4,7 @@
 #include <sstream>
 
 #include "ompl/base/spaces/DiscreteStateSpace.h"
-#include "../init.hh"
+#include "../init.h"
 namespace nb = nanobind;
 
 void ompl::binding::base::initSpaces_DiscreteStateSpace(nb::module_ &m)

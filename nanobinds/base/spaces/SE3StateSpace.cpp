@@ -3,7 +3,7 @@
 #include <nanobind/stl/string.h>
 
 #include "ompl/base/spaces/SE3StateSpace.h"
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 
