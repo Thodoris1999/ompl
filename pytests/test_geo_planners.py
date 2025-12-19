@@ -39,7 +39,6 @@ def test_rrt_connect():
 
 def test_prm():
     # 1) Create SimpleSetup from environment
-    print("Test PRM")
     ss = create_simple_setup()
     si = ss.getSpaceInformation()
 
