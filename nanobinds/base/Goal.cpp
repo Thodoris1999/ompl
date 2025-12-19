@@ -6,7 +6,7 @@
 #include <sstream>
 
 #include "ompl/base/Goal.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

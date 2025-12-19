@@ -1,6 +1,6 @@
 #include <nanobind/nanobind.h>
 #include "ompl/control/planners/ltl/World.h"
-#include "../../init.hh"
+#include "../../init.h"
 
 namespace nb = nanobind;
 

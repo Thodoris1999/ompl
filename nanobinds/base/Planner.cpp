@@ -7,7 +7,7 @@
 
 #include "ompl/base/Planner.h"
 #include "ompl/base/PlannerStatus.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

@@ -4,7 +4,7 @@
 #include <nanobind/stl/string.h>
 #include <limits>
 #include "ompl/geometric/PathSimplifier.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

@@ -3,7 +3,7 @@
 #include <nanobind/trampoline.h>
 #include "ompl/base/MotionValidator.h"
 #include "ompl/base/SpaceInformation.h"
-#include "init.hh"
+#include "init.h"
 namespace nb = nanobind;// Trampoline class for Python subclassing
 class PyMotionValidator : public ompl::base::MotionValidator {
 public:

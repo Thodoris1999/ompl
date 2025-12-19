@@ -6,7 +6,7 @@
 #include <nanobind/eigen/dense.h>
 #include "ompl/base/ProjectionEvaluator.h"
 #include "ompl/base/StateSpace.h"
-#include "init.hh"
+#include "init.h"
 #include <sstream>
 
 namespace nb = nanobind;

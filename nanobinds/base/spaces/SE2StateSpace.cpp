@@ -1,7 +1,7 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/shared_ptr.h>
 #include "ompl/base/spaces/SE2StateSpace.h"
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 

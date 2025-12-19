@@ -1,6 +1,6 @@
 #include <nanobind/nanobind.h>
 #include "ompl/base/TypedSpaceInformation.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 

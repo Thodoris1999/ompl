@@ -6,7 +6,7 @@
 #include "ompl/base/spaces/SE2StateSpace.h"
 #include "ompl/base/MotionValidator.h"
 #include "ompl/base/SpaceInformation.h"
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

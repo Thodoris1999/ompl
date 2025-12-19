@@ -9,7 +9,7 @@
 #include "ompl/base/SpaceInformation.h"
 #include "ompl/base/State.h"
 #include "ompl/base/OptimizationObjective.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 

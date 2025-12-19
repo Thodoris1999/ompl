@@ -8,7 +8,7 @@
 
 #include "ompl/control/ODESolver.h"
 #include "ompl/control/SpaceInformation.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace oc = ompl::control;

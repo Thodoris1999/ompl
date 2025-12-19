@@ -7,7 +7,7 @@
 #include "ompl/control/Control.h"
 #include "ompl/control/ControlSpace.h"
 
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace oc = ompl::control;

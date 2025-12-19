@@ -8,7 +8,7 @@
 #include "ompl/control/ControlSampler.h"
 #include "ompl/base/spaces/RealVectorBounds.h"
 
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 namespace oc = ompl::control;

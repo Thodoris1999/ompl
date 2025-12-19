@@ -4,7 +4,7 @@
 #include <nanobind/eigen/dense.h>
 
 #include "ompl/base/spaces/RealVectorStateProjections.h"
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

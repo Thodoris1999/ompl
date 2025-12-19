@@ -3,7 +3,7 @@
 #include <nanobind/stl/vector.h>
 
 #include "ompl/util/PPM.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 

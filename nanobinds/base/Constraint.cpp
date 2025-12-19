@@ -3,7 +3,7 @@
 #include <nanobind/stl/shared_ptr.h>
 #include <nanobind/eigen/dense.h>
 #include "ompl/base/Constraint.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

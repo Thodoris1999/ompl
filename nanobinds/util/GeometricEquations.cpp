@@ -1,6 +1,6 @@
 #include <nanobind/nanobind.h>
 #include "ompl/util/GeometricEquations.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 

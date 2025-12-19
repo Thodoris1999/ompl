@@ -4,7 +4,7 @@
 #include <nanobind/stl/pair.h>
 
 #include "ompl/base/ConstrainedSpaceInformation.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

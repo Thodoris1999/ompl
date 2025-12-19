@@ -3,7 +3,7 @@
 #include <nanobind/stl/vector.h>
 
 #include "ompl/control/Control.h"
-#include "init.hh"
+#include "init.h"
 
 namespace nb = nanobind;
 namespace oc = ompl::control;

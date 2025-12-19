@@ -3,7 +3,7 @@
 
 #include <sstream>
 #include "ompl/base/goals/GoalSpace.h"
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;

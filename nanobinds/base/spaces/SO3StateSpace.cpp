@@ -4,7 +4,7 @@
 #include <sstream>
 
 #include "ompl/base/spaces/SO3StateSpace.h"
-#include "../init.hh"
+#include "../init.h"
 
 namespace nb = nanobind;
 

@@ -3,7 +3,7 @@
 #include <nanobind/stl/vector.h>
 #include <nanobind/trampoline.h>
 #include "ompl/control/planners/syclop/GridDecomposition.h"
-#include "../../init.hh"
+#include "../../init.h"
 
 namespace nb = nanobind;
 namespace oc = ompl::control;

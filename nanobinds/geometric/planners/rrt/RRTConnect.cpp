@@ -3,7 +3,7 @@
 #include <nanobind/stl/string.h>
 
 #include "ompl/geometric/planners/rrt/RRTConnect.h"
-#include "../../init.hh"
+#include "../../init.h"
 
 namespace nb = nanobind;
 using namespace ompl::geometric;
