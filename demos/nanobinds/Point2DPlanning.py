@@ -34,7 +34,7 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 ######################################################################
 
-# Author: Weihang Guo
+# Author: Ioan Sucan, Mark Moll, Weihang Guo
 
 from os.path import abspath, dirname, join
 import sys
