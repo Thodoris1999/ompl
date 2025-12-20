@@ -11,6 +11,7 @@ namespace ompl::binding::base
     void init_Path(nanobind::module_& m);
     void init_Planner(nanobind::module_& m);
     void init_PlannerData(nanobind::module_& m);
+    void init_PlannerDataStorage(nanobind::module_& m);
     void init_PlannerStatus(nanobind::module_& m);
     void init_PlannerTerminationCondition(nanobind::module_& m);
     void init_ProblemDefinition(nanobind::module_& m);

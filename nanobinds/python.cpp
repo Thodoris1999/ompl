@@ -23,6 +23,7 @@ NB_MODULE(_ompl, m)
     ompl::binding::base::init_Path(base);
     ompl::binding::base::init_Planner(base);
     ompl::binding::base::init_PlannerData(base);
+    ompl::binding::base::init_PlannerDataStorage(base);
     ompl::binding::base::init_PlannerStatus(base);
     ompl::binding::base::init_PlannerTerminationCondition(base);
     ompl::binding::base::init_StateSampler(base);
