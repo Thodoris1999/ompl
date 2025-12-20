@@ -56,3 +56,16 @@ def test_prm():
     ss.getPlanner().constructRoadmap(0.01)
     print("Clearing roadmap")
     ss.getPlanner().clear()
+
+
+def test_prm_star():
+    # 1) Create SimpleSetup from environment
+    ss = create_simple_setup()
+    si = ss.getSpaceInformation()
+
+    # 2) Create the PRMstar planner
+    prm_star_planner = og.PRMstar(si)
+
+    # 3) Solve and check result
+    solution_path = solve_with_planner(ss, prm_star_planner, timeout=0.01)
+    assert solution_path is not None

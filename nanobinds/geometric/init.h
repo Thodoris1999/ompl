@@ -3,6 +3,7 @@
 namespace ompl::binding::geometric
 {
     void initPlannersPrm_PRM(nanobind::module_& m);
+    void initPlannersPrm_PRMstar(nanobind::module_& m);
     void initPlannersRrt_RRT(nanobind::module_& m);
     void initPlannersRrt_RRTConnect(nanobind::module_& m);
     void init_PathGeometric(nanobind::module_& m);
