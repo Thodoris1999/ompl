@@ -34,7 +34,7 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 ######################################################################
 
-# Author: Weihang Guo
+# Author: Mark Moll, Weihang Guo
 
 from math import sin, cos
 from functools import partial
@@ -124,8 +124,7 @@ def plan():
 
     # attempt to solve the problem
     solved = ss.solve(20.0)
-
-    if solved:
+    if solved == ob.PlannerStatus.EXACT_SOLUTION:
         # print the path to screen
         print("Found solution:\n")
         ss.getSolutionPath().printAsMatrix()
