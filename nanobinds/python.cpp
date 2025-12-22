@@ -39,6 +39,9 @@ NB_MODULE(_ompl, m)
     ompl::binding::base::initGoals_GoalState(base);
     ompl::binding::base::initGoals_GoalStates(base);
     ompl::binding::base::initGoals_GoalLazySamples(base);
+    ompl::binding::base::init_OptimizationObjective(base);
+    ompl::binding::base::initObjectives_PathLengthOptimizationObjective(base);
+    ompl::binding::base::initObjectives_StateCostIntegralObjective(base);
     ompl::binding::base::init_ConstrainedSpaceInformation(base);
 
     ompl::binding::base::initSamplers_UniformValidStateSampler(base);
