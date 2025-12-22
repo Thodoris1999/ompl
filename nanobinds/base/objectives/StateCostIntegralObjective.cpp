@@ -4,6 +4,7 @@
 #include <nanobind/stl/string.h>
 
 #include "ompl/base/objectives/StateCostIntegralObjective.h"
+#include "ompl/base/OptimizationObjective.h"
 #include "../init.h"
 
 namespace nb = nanobind;
@@ -13,31 +14,55 @@ void ompl::binding::base::initObjectives_StateCostIntegralObjective(nb::module_ 
 {
     struct PyStateCostIntegralObjective : ob::StateCostIntegralObjective
     {
-        NB_TRAMPOLINE(ob::StateCostIntegralObjective, 5);
+        NB_TRAMPOLINE(ob::StateCostIntegralObjective, 3);
 
-        // Optional override
         ob::Cost stateCost(const ob::State *s) const override
         {
-            NB_OVERRIDE(stateCost, s);
+            nb::gil_scoped_acquire gil;
+            using Ret = ob::Cost;
+            nb::object self = nb::find(this);
+            if (self.is_valid()) {
+                nb::object cls = self.attr("__class__");
+                nb::dict cls_dict(cls.attr("__dict__"));
+                if (cls_dict.contains("stateCost")) {
+                    return nb::cast<Ret>(self.attr("stateCost")(s));
+                }
+            }
+            return ob::StateCostIntegralObjective::stateCost(s);
         }
 
-        // Optional override
-        ob::Cost motionCost(const ob::State *s1, const ob::State* s2) const override
+        ob::Cost motionCost(const ob::State *s1, const ob::State *s2) const override
         {
-            NB_OVERRIDE(motionCost, s1, s2);
+            nb::gil_scoped_acquire gil;
+            using Ret = ob::Cost;
+            nb::object self = nb::find(this);
+            if (self.is_valid()) {
+                nb::object cls = self.attr("__class__");
+                nb::dict cls_dict(cls.attr("__dict__"));
+                if (cls_dict.contains("motionCost")) {
+                    return nb::cast<Ret>(self.attr("motionCost")(s1, s2));
+                }
+            }
+            return ob::StateCostIntegralObjective::motionCost(s1, s2);
         }
 
-        // Optional override
         ob::Cost motionCostBestEstimate(const ob::State *s1, const ob::State *s2) const override
         {
-            NB_OVERRIDE(motionCostBestEstimate, s1, s2);
+            nb::gil_scoped_acquire gil;
+            using Ret = ob::Cost;
+            nb::object self = nb::find(this);
+            if (self.is_valid()) {
+                nb::object cls = self.attr("__class__");
+                nb::dict cls_dict(cls.attr("__dict__"));
+                if (cls_dict.contains("motionCostBestEstimate")) {
+                    return nb::cast<Ret>(self.attr("motionCostBestEstimate")(s1, s2));
+                }
+            }
+            return ob::StateCostIntegralObjective::motionCostBestEstimate(s1, s2);
         }
     };
 
-    // TODO [ob::StateCostIntegralObjective][TEST]
-    nb::class_<ob::StateCostIntegralObjective, PyStateCostIntegralObjective /* <-- trampoline */>(m, "StateCostIntegralObjective")
-        // constructor
+    nb::class_<ob::StateCostIntegralObjective, ob::OptimizationObjective, PyStateCostIntegralObjective /* <-- trampoline */>(m, "StateCostIntegralObjective")
         .def(nb::init<const ob::SpaceInformationPtr &, bool>(), nb::arg("si"), nb::arg("enableMotionCostInterpolation"))
-        // getter
         .def("isMotionCostInterpolationEnabled", &ob::StateCostIntegralObjective::isMotionCostInterpolationEnabled);
 }

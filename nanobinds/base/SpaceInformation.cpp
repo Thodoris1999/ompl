@@ -8,6 +8,7 @@
 
 #include "ompl/base/SpaceInformation.h"
 #include "ompl/base/State.h"
+#include "ompl/base/StateValidityChecker.h"
 #include "ompl/base/ValidStateSampler.h"
 #include "init.h"
 
@@ -28,6 +29,9 @@ void ompl::binding::base::init_SpaceInformation(nb::module_& m)
         .def("printState", [](const ompl::base::SpaceInformation &si, const ompl::base::State *state) { si.printState(state, std::cout); })
         .def("setStateValidityChecker", 
             nb::overload_cast<const std::function<bool(const ompl::base::State*)>&>
+            (&ompl::base::SpaceInformation::setStateValidityChecker))
+        .def("setStateValidityChecker",
+            nb::overload_cast<const ompl::base::StateValidityCheckerPtr&>
             (&ompl::base::SpaceInformation::setStateValidityChecker))
         .def("getStateValidityChecker", &ompl::base::SpaceInformation::getStateValidityChecker)
         .def("setMotionValidator", &ompl::base::SpaceInformation::setMotionValidator)

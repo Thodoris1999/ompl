@@ -148,4 +148,18 @@ void ompl::binding::base::init_OptimizationObjective(nb::module_ &m)
             obj.print(oss);
             return oss.str();
         });
+
+    // MultiOptimizationObjective - combines multiple objectives with weights
+    nb::class_<ob::MultiOptimizationObjective, ob::OptimizationObjective>(m, "MultiOptimizationObjective")
+        .def(nb::init<const ob::SpaceInformationPtr &>(), nb::arg("si"))
+        .def("addObjective", &ob::MultiOptimizationObjective::addObjective,
+             nb::arg("objective"), nb::arg("weight") = 1.0)
+        .def("getObjectiveCount", &ob::MultiOptimizationObjective::getObjectiveCount)
+        .def("getObjective", &ob::MultiOptimizationObjective::getObjective, nb::arg("idx"),
+             nb::rv_policy::reference_internal)
+        .def("getObjectiveWeight", &ob::MultiOptimizationObjective::getObjectiveWeight, nb::arg("idx"))
+        .def("setObjectiveWeight", &ob::MultiOptimizationObjective::setObjectiveWeight,
+             nb::arg("idx"), nb::arg("weight"))
+        .def("lock", &ob::MultiOptimizationObjective::lock)
+        .def("isLocked", &ob::MultiOptimizationObjective::isLocked);
 }

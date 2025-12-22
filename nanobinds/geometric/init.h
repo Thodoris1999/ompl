@@ -6,6 +6,13 @@ namespace ompl::binding::geometric
     void initPlannersPrm_PRMstar(nanobind::module_& m);
     void initPlannersRrt_RRT(nanobind::module_& m);
     void initPlannersRrt_RRTConnect(nanobind::module_& m);
+    void initPlannersRrt_RRTstar(nanobind::module_& m);
+    void initPlannersRrt_InformedRRTstar(nanobind::module_& m);
+    void initPlannersRrt_SORRTstar(nanobind::module_& m);
+    void initPlannersRrt_AORRTC(nanobind::module_& m);
+    void initPlannersInformedtrees_BITstar(nanobind::module_& m);
+    void initPlannersFmt_FMT(nanobind::module_& m);
+    void initPlannersFmt_BFMT(nanobind::module_& m);
     void init_PathGeometric(nanobind::module_& m);
     void init_PathHybridization(nanobind::module_& m);
     void init_PathSimplifier(nanobind::module_& m);

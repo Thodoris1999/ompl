@@ -78,6 +78,13 @@ NB_MODULE(_ompl, m)
     ompl::binding::geometric::initPlannersPrm_PRMstar(geometric);
     ompl::binding::geometric::initPlannersRrt_RRT(geometric);
     ompl::binding::geometric::initPlannersRrt_RRTConnect(geometric);
+    ompl::binding::geometric::initPlannersRrt_RRTstar(geometric);
+    ompl::binding::geometric::initPlannersRrt_InformedRRTstar(geometric);
+    ompl::binding::geometric::initPlannersRrt_SORRTstar(geometric);
+    ompl::binding::geometric::initPlannersRrt_AORRTC(geometric);
+    ompl::binding::geometric::initPlannersInformedtrees_BITstar(geometric);
+    ompl::binding::geometric::initPlannersFmt_FMT(geometric);
+    ompl::binding::geometric::initPlannersFmt_BFMT(geometric);
 
 
 
