@@ -5,6 +5,7 @@
 
 #include "ompl/base/objectives/StateCostIntegralObjective.h"
 #include "ompl/base/OptimizationObjective.h"
+#include "ompl/base/OptimizationObjective.h"
 #include "../init.h"
 
 namespace nb = nanobind;
@@ -14,6 +15,7 @@ void ompl::binding::base::initObjectives_StateCostIntegralObjective(nb::module_ 
 {
     struct PyStateCostIntegralObjective : ob::StateCostIntegralObjective
     {
+        NB_TRAMPOLINE(ob::StateCostIntegralObjective, 3);
         NB_TRAMPOLINE(ob::StateCostIntegralObjective, 3);
 
         ob::Cost stateCost(const ob::State *s) const override

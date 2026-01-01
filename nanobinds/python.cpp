@@ -85,8 +85,10 @@ NB_MODULE(_ompl, m)
     ompl::binding::geometric::initPlannersInformedtrees_BITstar(geometric);
     ompl::binding::geometric::initPlannersFmt_FMT(geometric);
     ompl::binding::geometric::initPlannersFmt_BFMT(geometric);
-
-
+    ompl::binding::geometric::initPlannersKpiece_KPIECE1(geometric);
+    ompl::binding::geometric::initPlannersKpiece_BKPIECE1(geometric);
+    ompl::binding::geometric::initPlannersKpiece_LBKPIECE1(geometric);
+    ompl::binding::geometric::initPlannersKpiece_Discretization(geometric);
 
     nb::module_ control = m.def_submodule("control");
     ompl::binding::control::init_Control(control);
