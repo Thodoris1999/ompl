@@ -7,10 +7,8 @@ namespace ompl::binding::control
     void init_ControlSpace(nanobind::module_& m);
     void init_ControlSpaceTypes(nanobind::module_& m);
     void init_DirectedControlSampler(nanobind::module_& m);
-    void init_ODESolver(nanobind::module_& m);
     void init_PathControl(nanobind::module_& m);
     void init_PlannerData(nanobind::module_& m);
-    void init_PlannerDataStorage(nanobind::module_& m);
     void init_SimpleDirectedControlSampler(nanobind::module_& m);
     void init_SimpleSetup(nanobind::module_& m);
     void init_SpaceInformation(nanobind::module_& m);
@@ -18,13 +16,6 @@ namespace ompl::binding::control
     void init_SteeredControlSampler(nanobind::module_& m);
     void initPlannersEst_EST(nanobind::module_& m);
     void initPlannersKpiece_KPIECE1(nanobind::module_& m);
-    void initPlannersLtl_Automaton(nanobind::module_& m);
-    void initPlannersLtl_LTLPlanner(nanobind::module_& m);
-    void initPlannersLtl_LTLProblemDefinition(nanobind::module_& m);
-    void initPlannersLtl_LTLSpaceInformation(nanobind::module_& m);
-    void initPlannersLtl_ProductGraph(nanobind::module_& m);
-    void initPlannersLtl_PropositionalDecomposition(nanobind::module_& m);
-    void initPlannersLtl_World(nanobind::module_& m);
     void initPlannersPdst_PDST(nanobind::module_& m);
     void initPlannersRrt_RRT(nanobind::module_& m);
     void initPlannersSst_SST(nanobind::module_& m);
@@ -33,7 +24,6 @@ namespace ompl::binding::control
     void initPlannersSyclop_Syclop(nanobind::module_& m);
     void initPlannersSyclop_SyclopEST(nanobind::module_& m);
     void initPlannersSyclop_SyclopRRT(nanobind::module_& m);
-    void initPlanners_PlannerIncludes(nanobind::module_& m);
     void initSpaces_DiscreteControlSpace(nanobind::module_& m);
     void initSpaces_RealVectorControlSpace(nanobind::module_& m);
     

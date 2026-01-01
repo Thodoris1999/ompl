@@ -49,11 +49,8 @@ nanobind_add_stub(
 # This allows references like "_ompl.base.State" to continue working
 add_custom_command(
     TARGET ompl_stub POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E echo "Fixing imports in generated .pyi files..."
-    COMMAND find ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl -name "*.pyi" -exec
-        sed -i -E "/^import _ompl\\./d" {} +
-    COMMAND find ${CMAKE_CURRENT_BINARY_DIR}/ompl/_ompl -name "*.pyi" -exec
-        sed -i "1i import ompl as _ompl" {} +
+    COMMAND ${CMAKE_COMMAND} -D dir="${CMAKE_CURRENT_BINARY_DIR}/.."
+        -P "${CMAKE_CURRENT_SOURCE_DIR}/../CMakeModules/fix_pyi_imports.cmake"
     COMMENT "Post-processing .pyi stubs to use 'import ompl as _ompl'"
 )
 
