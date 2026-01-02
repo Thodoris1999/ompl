@@ -22,7 +22,8 @@ from ViserGUI import ViserGUI
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 URDF_PATH = os.path.join(SCRIPT_DIR, "../resources/ur5/ur5_spherized.urdf")
-MESH_DIR = os.path.join(SCRIPT_DIR, "../resources/ur5")
+VAMP_DIR = os.path.join(SCRIPT_DIR, "../../external/vamp")
+MESH_DIR = os.path.join(VAMP_DIR, "resources/ur5")
 
 JOINT_NAMES = [
     "shoulder_pan_joint",
