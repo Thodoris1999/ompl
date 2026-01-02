@@ -45,6 +45,7 @@ NB_MODULE(_ompl, m)
     ompl::binding::base::init_ConstrainedSpaceInformation(base);
 
     ompl::binding::base::initSamplers_UniformValidStateSampler(base);
+    ompl::binding::base::initSamplers_ObstacleBasedValidStateSampler(base);
 
     ompl::binding::base::initSpaces_DiscreteStateSpace(base);
     ompl::binding::base::initSpaces_RealVectorBounds(base);
@@ -119,4 +120,5 @@ NB_MODULE(_ompl, m)
     nb::module_ util = m.def_submodule("util");
     ompl::binding::util::init_Console(util);
     ompl::binding::util::init_PPM(util);
+    ompl::binding::util::init_RandomNumbers(util);
 }
