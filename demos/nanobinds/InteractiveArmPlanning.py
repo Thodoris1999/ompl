@@ -34,7 +34,7 @@ JOINT_NAMES = [
 ]
 
 NUM_JOINTS = len(JOINT_NAMES)
-DEFAULT_CONFIG = np.array([0.0, -np.pi/4, np.pi/2, -np.pi/4, -np.pi/2, 0.0])
+DEFAULT_CONFIG = np.array([-np.pi/2, -np.pi/2, np.pi/2, -np.pi/2, -np.pi/2, 0.0])
 PATH_INTERPOLATION_STEPS = 50
 
 
