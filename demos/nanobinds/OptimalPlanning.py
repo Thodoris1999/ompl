@@ -34,7 +34,7 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 ######################################################################
 
-# Author: Luis G. Torres, Mark Moll， Weihang Guo
+# Author: Luis G. Torres, Mark Moll, Weihang Guo
 
 import sys
 
