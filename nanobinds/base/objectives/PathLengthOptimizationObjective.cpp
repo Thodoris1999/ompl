@@ -4,6 +4,7 @@
 #include <nanobind/stl/string.h>
 
 #include "ompl/base/objectives/PathLengthOptimizationObjective.h"
+#include "ompl/base/OptimizationObjective.h"
 #include "../init.h"
 
 namespace nb = nanobind;
@@ -40,8 +41,6 @@ void ompl::binding::base::initObjectives_PathLengthOptimizationObjective(nb::mod
         }
     };
 
-    // TODO [ob::PathLengthOptimizationObjective][TEST]
-    nb::class_<ob::PathLengthOptimizationObjective, PyPathLengthOptimizationObjective /* <-- trampoline */>(m, "PathLengthOptimizationObjective")
-        // constructor
+    nb::class_<ob::PathLengthOptimizationObjective, ob::OptimizationObjective, PyPathLengthOptimizationObjective /* <-- trampoline */>(m, "PathLengthOptimizationObjective")
         .def(nb::init<const ob::SpaceInformationPtr &>(), nb::arg("si"));
 }
