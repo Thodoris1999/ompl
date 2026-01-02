@@ -32,6 +32,7 @@ namespace ompl::binding::base
     void initGoals_GoalState(nanobind::module_& m);
     void initGoals_GoalStates(nanobind::module_& m);
     void initSamplers_UniformValidStateSampler(nanobind::module_& m);
+    void initSamplers_ObstacleBasedValidStateSampler(nanobind::module_& m);
     void initSpacesConstraint_AtlasChart(nanobind::module_& m);
     void initSpacesConstraint_AtlasStateSpace(nanobind::module_& m);
     void initSpacesConstraint_ConstrainedStateSpace(nanobind::module_& m);
