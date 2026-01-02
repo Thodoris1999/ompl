@@ -120,4 +120,5 @@ NB_MODULE(_ompl, m)
     nb::module_ util = m.def_submodule("util");
     ompl::binding::util::init_Console(util);
     ompl::binding::util::init_PPM(util);
+    ompl::binding::util::init_RandomNumbers(util);
 }
