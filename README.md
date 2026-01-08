@@ -39,6 +39,11 @@ following commands:
     mkdir -p build/Release
     cd build/Release
     cmake ../..
-    # next step is optional
-    make -j 4 update_bindings # if you want Python bindings
     make -j 4 # replace "4" with the number of cores on your machine
+
+To install the Python binding. Go to the top-level directory of OMPL and type the following commands:
+```
+git submodule update --init --recursive  # for VAMP integration
+cd nanobinds
+pip install . 
+```
