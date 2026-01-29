@@ -96,6 +96,41 @@ def test_rv_state_space():
     with pytest.raises(TypeError, match="Slice step must be a positive integer"):
         _ = state[0:2:-1]
 
+    # 4. Slice Assignment (valid)
+    # Re-allocate state to test assignment
+    rvss5 = ob.RealVectorStateSpace(5)
+    s5 = rvss5.allocState()
+    
+    # Assign contiguous slice
+    s5[0:2] = [1.1, 2.2]
+    assert s5[0] == pytest.approx(1.1)
+    assert s5[1] == pytest.approx(2.2)
+
+    # Assign strided slice (step 2)
+    s5[0:5:2] = [10.0, 20.0, 30.0]
+    # s5[0] = 10.0, s5[2] = 20.0, s5[4] = 30.0. Intermediates s5[1], s5[3] unchanged (0.0 default or prev value)
+    assert s5[0] == pytest.approx(10.0)
+    assert s5[2] == pytest.approx(20.0)
+    assert s5[4] == pytest.approx(30.0)
+
+    # 5. Invalid Slice Assignment (should raise TypeError or ValueError)
+    
+    # Open-ended
+    with pytest.raises(TypeError, match="Open-ended slices are not supported"):
+        s5[:] = [1.0] * 5
+
+    # Negative indices
+    with pytest.raises(TypeError, match="Negative slice indices require a known dim count"):
+        s5[-1:2] = [1.0]
+
+    # Negative/Zero step
+    with pytest.raises(TypeError, match="Slice step must be a positive integer"):
+        s5[0:2:0] = [1.0, 1.0]
+    
+    # Size mismatch
+    with pytest.raises(ValueError, match="Size of assignment does not match slice size"):
+        s5[0:2] = [1.0] # Slice len 2, values len 1
+
     # Allocate another state, sample uniformly, and check the distance.
     state_another = rvss.allocState()
     sampler.sampleUniform(state_another)

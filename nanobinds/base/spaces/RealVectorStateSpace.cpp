@@ -90,13 +90,56 @@ void ompl::binding::base::initSpaces_RealVectorStateSpace(nb::module_ &m)
                  return result;
              })
         .def("__setitem__",
-             [](ob::RealVectorStateSpace::StateType *s, const nb::slice &slice, const std::vector<double> &values) {
-                 // Use a large dimension for slice computation (no actual bounds checking)
-                 auto [start, stop, step, slicelength] = slice.compute(10000);
-                 
+             [](ob::RealVectorStateSpace::StateType *s,
+                const nb::slice &slice,
+                const std::vector<double> &values) {
+
+                 // Reject open-ended slices: arr[:], arr[a:], arr[::k]
+                 if (slice.attr("stop").is_none()) {
+                     throw nb::type_error(
+                         "Open-ended slices are not supported (unknown state dim)");
+                 }
+
+                 // Extract stop (required)
+                 ssize_t stop = nb::cast<ssize_t>(slice.attr("stop"));
+
+                 // Extract start (default 0)
+                 ssize_t start = 0;
+                 if (!slice.attr("start").is_none())
+                     start = nb::cast<ssize_t>(slice.attr("start"));
+
+                 // Extract step (default 1)
+                 ssize_t step = 1;
+                 if (!slice.attr("step").is_none())
+                     step = nb::cast<ssize_t>(slice.attr("step"));
+
+                 // Reject negative or zero step
+                 if (step <= 0) {
+                     throw nb::type_error("Slice step must be a positive integer");
+                 }
+
+                 // Reject negative indices (need length to resolve them)
+                 if (start < 0 || stop < 0) {
+                     throw nb::type_error(
+                         "Negative slice indices require a known dim count");
+                 }
+
+                 // Compute slice length safely
+                 size_t slicelength = 0;
+                 if (stop > start) {
+                    slicelength = static_cast<size_t>((stop - start + step - 1) / step);
+                 }
+                
+                 if (values.size() != slicelength) {
+                     throw nb::value_error(
+                         "Size of assignment does not match slice size");
+                 }
+
                  if (step == 1) {
                      // Contiguous memory - use memcpy for maximum efficiency
-                     std::memcpy(&s->values[start], values.data(), slicelength * sizeof(double));
+                     std::memcpy(&s->values[start],
+                                 values.data(),
+                                 slicelength * sizeof(double));
                  } else {
                      // Non-contiguous - manual loop
                      for (size_t i = 0; i < slicelength; ++i) {
