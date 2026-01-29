@@ -14,9 +14,70 @@
 
 namespace nb = nanobind;
 
+
+// Helper to get dict pointer safely
+static PyObject **get_dict_ptr(PyObject *obj) {
+    return _PyObject_GetDictPtr(obj);
+}
+
+int space_information_tp_traverse(PyObject *self, visitproc visit, void *arg) {
+    Py_VISIT(Py_TYPE(self));
+    if (!nb::inst_ready(self)) return 0;
+
+    // 1. Visit __dict__ (handles references stored in Python attributes)
+    PyObject **dictptr = get_dict_ptr(self);
+    if (dictptr && *dictptr) {
+        Py_VISIT(*dictptr);
+    }
+
+    try {
+        auto *si = nb::inst_ptr<ompl::base::SpaceInformation>(self);
+        if (si) {
+            auto svc = si->getStateValidityChecker();
+            if (svc) {
+                // 2. Try to visit C++ child via nb::find (works for Python Classes)
+                nb::handle h = nb::find(svc);
+                if (h.is_valid()) {
+                     Py_VISIT(h.ptr());
+                } else if (dictptr && *dictptr) {
+                     // 3. If nb::find failed (Lambda), visit the proxy in __dict__ explicitely
+                     // to account for the C++ reference (since Lambda + std::function = 2 refs).
+                     PyObject *item = PyDict_GetItemString(*dictptr, "_svc");
+                     if (item) {
+                         Py_VISIT(item);
+                     }
+                }
+            }
+        }
+    } catch (...) {}
+    return 0;
+}
+
+int space_information_tp_clear(PyObject *self) {
+    // 1. Clear __dict__
+    PyObject **dictptr = get_dict_ptr(self);
+    if (dictptr && *dictptr) {
+        Py_CLEAR(*dictptr);
+    }
+    // 2. Break C++ Cycle
+    try {
+        auto *si = nb::inst_ptr<ompl::base::SpaceInformation>(self);
+        if (si) {
+            si->setStateValidityChecker(ompl::base::StateValidityCheckerPtr(nullptr));
+        }
+    } catch (...) {}
+    return 0;
+}
+
+PyType_Slot space_information_slots[] = {
+    { Py_tp_traverse, (void *) space_information_tp_traverse },
+    { Py_tp_clear, (void *) space_information_tp_clear },
+    { 0, 0 }
+};
+
 void ompl::binding::base::init_SpaceInformation(nb::module_& m)
 {
-    nb::class_<ompl::base::SpaceInformation>(m, "SpaceInformation")
+    nb::class_<ompl::base::SpaceInformation>(m, "SpaceInformation", nb::type_slots(space_information_slots), nb::dynamic_attr())
         .def(nb::init<ompl::base::StateSpacePtr>())
         .def("isValid", &ompl::base::SpaceInformation::isValid)
         .def("getStateSpace", &ompl::base::SpaceInformation::getStateSpace)
@@ -28,11 +89,32 @@ void ompl::binding::base::init_SpaceInformation(nb::module_& m)
         .def("enforceBounds", &ompl::base::SpaceInformation::enforceBounds)
         .def("printState", [](const ompl::base::SpaceInformation &si, const ompl::base::State *state) { si.printState(state, std::cout); })
         .def("setStateValidityChecker", 
-            nb::overload_cast<const std::function<bool(const ompl::base::State*)>&>
-            (&ompl::base::SpaceInformation::setStateValidityChecker))
+            [](ompl::base::SpaceInformation &si, const std::function<bool(const ompl::base::State*)> &func) {
+                si.setStateValidityChecker(func);
+                // Store in dict for traversal
+                nb::object self = nb::find(nb::cast(&si)); // Should verify find works for self
+                if (self.is_valid()) {
+                    nb::setattr(self, "_svc", nb::cast(func));
+                }
+            },
+            nb::arg("svc"))
         .def("setStateValidityChecker",
-            nb::overload_cast<const ompl::base::StateValidityCheckerPtr&>
-            (&ompl::base::SpaceInformation::setStateValidityChecker))
+            [](ompl::base::SpaceInformation &si, const ompl::base::StateValidityCheckerPtr &svc) {
+                si.setStateValidityChecker(svc);
+                 // Store in dict for traversal
+                nb::object self = nb::find(nb::cast(&si));
+                if (self.is_valid()) {
+                    nb::setattr(self, "_svc", nb::cast(svc));
+                }
+            },
+            nb::arg("svc"))
+        .def("clearStateValidityChecker", [](ompl::base::SpaceInformation &si) {
+            si.setStateValidityChecker(ompl::base::StateValidityCheckerPtr(nullptr));
+            nb::object self = nb::find(nb::cast(&si));
+            if (self.is_valid() && nb::hasattr(self, "_svc")) {
+                nb::delattr(self, "_svc");
+            }
+        })
         .def("getStateValidityChecker", &ompl::base::SpaceInformation::getStateValidityChecker)
         .def("setMotionValidator", &ompl::base::SpaceInformation::setMotionValidator)
         .def("getMotionValidator", nb::overload_cast<>(&ompl::base::SpaceInformation::getMotionValidator, nb::const_))
