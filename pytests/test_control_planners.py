@@ -4,9 +4,9 @@ from ompl import base as ob
 from ompl import control as oc
 import pytest
 
-def isStateValid(spaceInformation, state):
+def isStateValid(space, state):
     # perform collision checking or check if other constraints are satisfied
-    return spaceInformation.satisfiesBounds(state)
+    return space.satisfiesBounds(state)
 
 def propagate(temp1, control, duration, state):
     # For demonstration, intentionally messing up the partial usage
@@ -41,7 +41,7 @@ def test_control_no_planner():
 
     # 5) Provide a state validity checker as a lambda
     # This partial-lambda structure ensures the argument signature matches (State*) -> bool
-    ss.setStateValidityChecker(lambda s: isStateValid(ss.getSpaceInformation(), s))
+    ss.setStateValidityChecker(lambda s: isStateValid(space, s))
     
     # 6) Provide a state propagator
     ss.setStatePropagator(propagate)
@@ -63,7 +63,6 @@ def test_control_no_planner():
     # 9) Attempt to solve
     solved = ss.solve(2)
     
-    ss.clearStateValidityChecker()
     # If solved, optionally retrieve path
     if solved:
         print("Found solution path.")
@@ -96,7 +95,7 @@ def test_control_rrt():
 
     # 5) Provide a state validity checker as a lambda
     # This partial-lambda structure ensures the argument signature matches (State*) -> bool
-    ss.setStateValidityChecker(lambda s: isStateValid(ss.getSpaceInformation(), s))
+    ss.setStateValidityChecker(lambda s: isStateValid(space, s))
     
     # 6) Provide a state propagator
     ss.setStatePropagator(propagate)
@@ -119,9 +118,6 @@ def test_control_rrt():
     ss.setPlanner(planner)
     # 9) Attempt to solve
     solved = ss.solve(2)
-    
-    # Break the reference cycle
-    ss.clearStateValidityChecker()
 
     # If solved, optionally retrieve path
     if solved:
