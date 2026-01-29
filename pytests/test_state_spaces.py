@@ -36,21 +36,65 @@ def test_rv_state_space():
     assert state[0] == pytest.approx(0.5)
     assert state[1] == pytest.approx(0.5)
     
-    # NOTE: Open-ended slices like state[:] or state[1:] do NOT work because
-    # StateType doesn't know its dimension. Use explicit bounds instead.
+    # Valid slice operations
     dim = rvss.getDimension()
-    
-    state_values = state[0:dim]  # Explicit bounds work correctly
+
+    # 1. Explicit bounds (valid)
+    state_values = state[0:dim]
     assert state_values == [0.5, 0.5]
+
+    state_values = state[0:dim:1]
+    assert state_values == [0.5, 0.5]
+
+    state_values = state[1:dim]
+    assert state_values == [0.5]
+
+    state_values = state[0:1]
+    assert state_values == [0.5]
+
+    # 2. Strided slices (valid)
+    # Re-allocate state to test strides
+    rvss_large = ob.RealVectorStateSpace(5)
+    state_large = rvss_large.allocState()
+    for i in range(5):
+        state_large[i] = float(i)
+    
+    # stride 2
+    res = state_large[0:5:2] # [0.0, 2.0, 4.0]
+    assert res == [0.0, 2.0, 4.0]
+    
+    # stride 3
+    res = state_large[0:5:3] # [0.0, 3.0]
+    assert res == [0.0, 3.0]
 
     state_values = state[:2]
     assert state_values == [0.5, 0.5]
 
-    state_values = state[1:dim]  # Use explicit end bound
-    assert state_values == [0.5]
+    # 3. Invalid slice operations (should raise TypeError)
 
-    state_values = state[1:2]
-    assert state_values == [0.5]
+    # Open-ended slices
+    with pytest.raises(TypeError, match="Open-ended slices are not supported"):
+        _ = state[:]
+    
+    with pytest.raises(TypeError, match="Open-ended slices are not supported"):
+        _ = state[0:]
+
+    with pytest.raises(TypeError, match="Open-ended slices are not supported"):
+        _ = state[::1]
+
+    # Negative indices
+    with pytest.raises(TypeError, match="Negative slice indices require a known dim count"):
+        _ = state[-1:2]
+    
+    with pytest.raises(TypeError, match="Negative slice indices require a known dim count"):
+        _ = state[0:-1]
+
+    # Negative/Zero step
+    with pytest.raises(TypeError, match="Slice step must be a positive integer"):
+        _ = state[0:2:0]
+    
+    with pytest.raises(TypeError, match="Slice step must be a positive integer"):
+        _ = state[0:2:-1]
 
     # Allocate another state, sample uniformly, and check the distance.
     state_another = rvss.allocState()
