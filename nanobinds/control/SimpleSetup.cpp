@@ -33,7 +33,7 @@ void ompl::binding::control::init_SimpleSetup(nb::module_ &m)
         .def(nb::init<oc::ControlSpacePtr>(), nb::arg("controlSpace"))
 
         // getSpaceInformation, returns SpaceInformationPtr
-        .def("getSpaceInformation", &oc::SimpleSetup::getSpaceInformation, nb::rv_policy::reference_internal)
+        .def("getSpaceInformation", &oc::SimpleSetup::getSpaceInformation)
 
         // ProblemDefinition
         .def("getProblemDefinition",
@@ -43,15 +43,15 @@ void ompl::binding::control::init_SimpleSetup(nb::module_ &m)
                  &oc::SimpleSetup::getProblemDefinition))
 
         // getStateSpace, getControlSpace
-        .def("getStateSpace", &oc::SimpleSetup::getStateSpace, nb::rv_policy::reference_internal)
-        .def("getControlSpace", &oc::SimpleSetup::getControlSpace, nb::rv_policy::reference_internal)
+        .def("getStateSpace", &oc::SimpleSetup::getStateSpace)
+        .def("getControlSpace", &oc::SimpleSetup::getControlSpace)
 
         // Common getters
-        .def("getStateValidityChecker", &oc::SimpleSetup::getStateValidityChecker, nb::rv_policy::reference_internal)
-        .def("getStatePropagator", &oc::SimpleSetup::getStatePropagator, nb::rv_policy::reference_internal)
-        .def("getGoal", &oc::SimpleSetup::getGoal, nb::rv_policy::reference_internal)
-        .def("getPlanner", &oc::SimpleSetup::getPlanner, nb::rv_policy::reference_internal)
-        .def("getPlannerAllocator", &oc::SimpleSetup::getPlannerAllocator, nb::rv_policy::reference_internal)
+        .def("getStateValidityChecker", &oc::SimpleSetup::getStateValidityChecker)
+        .def("getStatePropagator", &oc::SimpleSetup::getStatePropagator)
+        .def("getGoal", &oc::SimpleSetup::getGoal)
+        .def("getPlanner", &oc::SimpleSetup::getPlanner)
+        .def("getPlannerAllocator", &oc::SimpleSetup::getPlannerAllocator)
 
         // solution path checks
         .def("haveExactSolutionPath", &oc::SimpleSetup::haveExactSolutionPath)
@@ -70,6 +70,9 @@ void ompl::binding::control::init_SimpleSetup(nb::module_ &m)
         // setStateValidityChecker (two overloads)
         .def("setStateValidityChecker", nb::overload_cast<const ompl::base::StateValidityCheckerFn &>(
                                             &ompl::control::SimpleSetup::setStateValidityChecker))
+        .def("clearStateValidityChecker", [](oc::SimpleSetup &ss) {
+            ss.setStateValidityChecker(ompl::base::StateValidityCheckerPtr(nullptr));
+        })
         // setStatePropagator
         .def(
             "setStatePropagator",

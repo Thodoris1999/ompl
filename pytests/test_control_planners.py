@@ -122,9 +122,16 @@ def test_control_rrt():
     ss.setPlanner(planner)
     # 9) Attempt to solve
     solved = ss.solve(2)
+    
+    # Break the reference cycle
+    ss.clearStateValidityChecker()
 
     # If solved, optionally retrieve path
     if solved:
         print("Found solution path.")
         path = ss.getSolutionPath()
         path.printAsMatrix()
+
+if __name__ == "__main__":
+    # test_control_no_planner()
+    test_control_rrt()

@@ -33,54 +33,44 @@ nb::class_<og::SimpleSetup>(m, "SimpleSetup")
      
      // getSpaceInformation
      .def("getSpaceInformation",
-          &og::SimpleSetup::getSpaceInformation,
-          nb::rv_policy::reference_internal)
+          &og::SimpleSetup::getSpaceInformation)
      
      // getProblemDefinition (two overloads: const and non-const)
+     // getProblemDefinition (two overloads: const and non-const)
      .def("getProblemDefinition",
-          static_cast<ob::ProblemDefinitionPtr &(og::SimpleSetup::*)()>(&og::SimpleSetup::getProblemDefinition),
-          nb::rv_policy::reference_internal)
+          static_cast<ob::ProblemDefinitionPtr &(og::SimpleSetup::*)()>(&og::SimpleSetup::getProblemDefinition))
      .def("getProblemDefinitionConst",
-          static_cast<const ob::ProblemDefinitionPtr &(og::SimpleSetup::*)() const>(&og::SimpleSetup::getProblemDefinition),
-          nb::rv_policy::reference_internal)
+          static_cast<const ob::ProblemDefinitionPtr &(og::SimpleSetup::*)() const>(&og::SimpleSetup::getProblemDefinition))
      
      // getStateSpace
      .def("getStateSpace",
-          &og::SimpleSetup::getStateSpace,
-          nb::rv_policy::reference_internal)
+          &og::SimpleSetup::getStateSpace)
      
      // getStateValidityChecker
      .def("getStateValidityChecker",
-          &og::SimpleSetup::getStateValidityChecker,
-          nb::rv_policy::reference_internal)
+          &og::SimpleSetup::getStateValidityChecker)
      
      // getGoal
      .def("getGoal",
-          &og::SimpleSetup::getGoal,
-          nb::rv_policy::reference_internal)
+          &og::SimpleSetup::getGoal)
      
      // getPlanner
      .def("getPlanner",
-          &og::SimpleSetup::getPlanner,
-          nb::rv_policy::reference_internal)
+          &og::SimpleSetup::getPlanner)
      
      // getPlannerAllocator
      .def("getPlannerAllocator",
-          &og::SimpleSetup::getPlannerAllocator,
-          nb::rv_policy::reference_internal)
+          &og::SimpleSetup::getPlannerAllocator)
      
      // getPathSimplifier
      .def("getPathSimplifier",
-          static_cast<og::PathSimplifierPtr &(og::SimpleSetup::*)()>(&og::SimpleSetup::getPathSimplifier),
-          nb::rv_policy::reference_internal)
+          static_cast<og::PathSimplifierPtr &(og::SimpleSetup::*)()>(&og::SimpleSetup::getPathSimplifier))
      .def("getPathSimplifierConst",
-          static_cast<const og::PathSimplifierPtr &(og::SimpleSetup::*)() const>(&og::SimpleSetup::getPathSimplifier),
-          nb::rv_policy::reference_internal)
+          static_cast<const og::PathSimplifierPtr &(og::SimpleSetup::*)() const>(&og::SimpleSetup::getPathSimplifier))
      
      // getOptimizationObjective
      .def("getOptimizationObjective",
-          &og::SimpleSetup::getOptimizationObjective,
-          nb::rv_policy::reference_internal)
+          &og::SimpleSetup::getOptimizationObjective)
      
      // haveExactSolutionPath, haveSolutionPath
      .def("haveExactSolutionPath",

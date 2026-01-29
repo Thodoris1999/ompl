@@ -69,3 +69,9 @@ def test_prm_star():
     # 3) Solve and check result
     solution_path = solve_with_planner(ss, prm_star_planner, timeout=0.01)
     assert solution_path is not None
+
+if __name__ == "__main__":
+    test_rrt()
+    test_rrt_connect()
+    test_prm()
+    test_prm_star()

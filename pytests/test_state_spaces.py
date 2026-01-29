@@ -425,3 +425,9 @@ def test_time_state_space():
     sampler.sampleUniform(sampled_state)
     # Check that the sampled time is within bounds.
     assert 0.0 <= sampled_state.position <= 10.0, f"Uniform sampled time {sampled_state.position} out of bounds"
+
+if __name__ == "__main__":
+    test_rv_state_space()
+    test_compound_state_space()
+    test_se2_state_space()
+    test_time_state_space()
