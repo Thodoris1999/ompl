@@ -126,4 +126,7 @@ def test_planner_data_vertex():
     retrieved_state = vertex.getState()
     assert retrieved_state is not None
     
-
+if __name__ == "__main__":
+    test_planner_data_basic()
+    test_planner_data_storage()
+    test_planner_data_vertex()

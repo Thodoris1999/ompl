@@ -135,3 +135,8 @@ def test_path_control():
 
     assert pc.getStateCount() == 2
     assert pc.getControlCount() == 1
+
+if __name__ == "__main__":
+    test_control_state_space()
+    test_control_space_information()
+    test_path_control()

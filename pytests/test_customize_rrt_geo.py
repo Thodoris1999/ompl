@@ -223,3 +223,7 @@ def test_customize_planner_discrete():
                     break
     else:
         print("No solution found within 1 second of planning time.")
+
+if __name__ == "__main__":
+    test_customize_planner_rvss()
+    test_customize_planner_discrete()

@@ -26,7 +26,7 @@ void ompl::binding::control::init_SpaceInformation(nb::module_ &m)
         .def(nb::init<ob::StateSpacePtr, oc::ControlSpacePtr>(), nb::arg("stateSpace"), nb::arg("controlSpace"))
 
         // getControlSpace
-        .def("getControlSpace", &oc::SpaceInformation::getControlSpace, nb::rv_policy::reference_internal)
+        .def("getControlSpace", &oc::SpaceInformation::getControlSpace)
 
         // allocControl, freeControl, copyControl, cloneControl
         .def("allocControl", &oc::SpaceInformation::allocControl)
@@ -60,7 +60,7 @@ void ompl::binding::control::init_SpaceInformation(nb::module_ &m)
         .def("clearDirectedSamplerAllocator", &oc::SpaceInformation::clearDirectedSamplerAllocator)
 
         // StatePropagator
-        .def("getStatePropagator", &oc::SpaceInformation::getStatePropagator, nb::rv_policy::reference_internal)
+        .def("getStatePropagator", &oc::SpaceInformation::getStatePropagator)
 
         // setStatePropagator
         .def("setStatePropagator",

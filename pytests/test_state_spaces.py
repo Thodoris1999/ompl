@@ -36,21 +36,100 @@ def test_rv_state_space():
     assert state[0] == pytest.approx(0.5)
     assert state[1] == pytest.approx(0.5)
     
-    # NOTE: Open-ended slices like state[:] or state[1:] do NOT work because
-    # StateType doesn't know its dimension. Use explicit bounds instead.
+    # Valid slice operations
     dim = rvss.getDimension()
-    
-    state_values = state[0:dim]  # Explicit bounds work correctly
+
+    # 1. Explicit bounds (valid)
+    state_values = state[0:dim]
     assert state_values == [0.5, 0.5]
+
+    state_values = state[0:dim:1]
+    assert state_values == [0.5, 0.5]
+
+    state_values = state[1:dim]
+    assert state_values == [0.5]
+
+    state_values = state[0:1]
+    assert state_values == [0.5]
+
+    # 2. Strided slices (valid)
+    # Re-allocate state to test strides
+    rvss_large = ob.RealVectorStateSpace(5)
+    state_large = rvss_large.allocState()
+    for i in range(5):
+        state_large[i] = float(i)
+    
+    # stride 2
+    res = state_large[0:5:2] # [0.0, 2.0, 4.0]
+    assert res == [0.0, 2.0, 4.0]
+    
+    # stride 3
+    res = state_large[0:5:3] # [0.0, 3.0]
+    assert res == [0.0, 3.0]
 
     state_values = state[:2]
     assert state_values == [0.5, 0.5]
 
-    state_values = state[1:dim]  # Use explicit end bound
-    assert state_values == [0.5]
+    # 3. Invalid slice operations (should raise TypeError)
 
-    state_values = state[1:2]
-    assert state_values == [0.5]
+    # Open-ended slices
+    with pytest.raises(TypeError, match="Open-ended slices are not supported"):
+        _ = state[:]
+    
+    with pytest.raises(TypeError, match="Open-ended slices are not supported"):
+        _ = state[0:]
+
+    with pytest.raises(TypeError, match="Open-ended slices are not supported"):
+        _ = state[::1]
+
+    # Negative indices
+    with pytest.raises(TypeError, match="Negative slice indices require a known dim count"):
+        _ = state[-1:2]
+    
+    with pytest.raises(TypeError, match="Negative slice indices require a known dim count"):
+        _ = state[0:-1]
+
+    # Negative/Zero step
+    with pytest.raises(TypeError, match="Slice step must be a positive integer"):
+        _ = state[0:2:0]
+    
+    with pytest.raises(TypeError, match="Slice step must be a positive integer"):
+        _ = state[0:2:-1]
+
+    # 4. Slice Assignment (valid)
+    # Re-allocate state to test assignment
+    rvss5 = ob.RealVectorStateSpace(5)
+    s5 = rvss5.allocState()
+    
+    # Assign contiguous slice
+    s5[0:2] = [1.1, 2.2]
+    assert s5[0] == pytest.approx(1.1)
+    assert s5[1] == pytest.approx(2.2)
+
+    # Assign strided slice (step 2)
+    s5[0:5:2] = [10.0, 20.0, 30.0]
+    # s5[0] = 10.0, s5[2] = 20.0, s5[4] = 30.0. Intermediates s5[1], s5[3] unchanged (0.0 default or prev value)
+    assert s5[0] == pytest.approx(10.0)
+    assert s5[2] == pytest.approx(20.0)
+    assert s5[4] == pytest.approx(30.0)
+
+    # 5. Invalid Slice Assignment (should raise TypeError or ValueError)
+    
+    # Open-ended
+    with pytest.raises(TypeError, match="Open-ended slices are not supported"):
+        s5[:] = [1.0] * 5
+
+    # Negative indices
+    with pytest.raises(TypeError, match="Negative slice indices require a known dim count"):
+        s5[-1:2] = [1.0]
+
+    # Negative/Zero step
+    with pytest.raises(TypeError, match="Slice step must be a positive integer"):
+        s5[0:2:0] = [1.0, 1.0]
+    
+    # Size mismatch
+    with pytest.raises(ValueError, match="Size of assignment does not match slice size"):
+        s5[0:2] = [1.0] # Slice len 2, values len 1
 
     # Allocate another state, sample uniformly, and check the distance.
     state_another = rvss.allocState()
@@ -346,3 +425,9 @@ def test_time_state_space():
     sampler.sampleUniform(sampled_state)
     # Check that the sampled time is within bounds.
     assert 0.0 <= sampled_state.position <= 10.0, f"Uniform sampled time {sampled_state.position} out of bounds"
+
+if __name__ == "__main__":
+    test_rv_state_space()
+    test_compound_state_space()
+    test_se2_state_space()
+    test_time_state_space()

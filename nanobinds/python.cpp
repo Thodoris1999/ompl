@@ -8,7 +8,7 @@ namespace nb = nanobind;
 
 NB_MODULE(_ompl, m)
 {
-    nb::set_leak_warnings(false);
+    // nb::set_leak_warnings(false);
     
     m.doc() = "OMPL Python Bindings";
 
