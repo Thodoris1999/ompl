@@ -62,16 +62,13 @@ def test_control_no_planner():
 
     # 9) Attempt to solve
     solved = ss.solve(2)
-
+    
+    ss.clearStateValidityChecker()
     # If solved, optionally retrieve path
     if solved:
         print("Found solution path.")
         path = ss.getSolutionPath()
         path.printAsMatrix()
-
-    del ss
-    import gc
-    gc.collect()
 
 def test_control_rrt():
     # 1) Construct the SE2 state space
