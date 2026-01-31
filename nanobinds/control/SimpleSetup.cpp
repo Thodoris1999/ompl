@@ -59,13 +59,12 @@ void ompl::binding::control::init_SimpleSetup(nb::module_ &m)
 
         // getSolutionPath: returns a PathControl& => use reference_internal
         .def(
-            "getSolutionPath", [](oc::SimpleSetup &self) -> oc::PathControl & { return self.getSolutionPath(); },
-            nb::rv_policy::reference_internal)
+            "getSolutionPath", [](oc::SimpleSetup &self) -> oc::PathControl & { return self.getSolutionPath(); })
 
         // getPlannerData
         .def(
             "getPlannerData", [](const oc::SimpleSetup &ss, ob::PlannerData &pd) { ss.getPlannerData(pd); },
-            nb::arg("plannerData"), nb::rv_policy::reference_internal)
+            nb::arg("plannerData"))
 
         // setStateValidityChecker (two overloads)
         .def("setStateValidityChecker", nb::overload_cast<const ompl::base::StateValidityCheckerFn &>(

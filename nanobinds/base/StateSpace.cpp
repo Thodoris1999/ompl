@@ -43,8 +43,8 @@ void ompl::binding::base::init_StateSpace(nb::module_ &m)
         .def("registerProjection", &ob::StateSpace::registerProjection, nb::arg("name"), nb::arg("projection"))
         .def("registerDefaultProjection", &ob::StateSpace::registerDefaultProjection, nb::arg("projection"))
         .def("registerProjections", &ob::StateSpace::registerProjections)
-        .def("getProjection", &ob::StateSpace::getProjection, nb::arg("name"), nb::rv_policy::reference_internal)
-        .def("getDefaultProjection", &ob::StateSpace::getDefaultProjection, nb::rv_policy::reference_internal)
+        .def("getProjection", &ob::StateSpace::getProjection, nb::arg("name"))
+        .def("getDefaultProjection", &ob::StateSpace::getDefaultProjection)
         .def("hasProjection", &ob::StateSpace::hasProjection, nb::arg("name"))
         .def("hasDefaultProjection", &ob::StateSpace::hasDefaultProjection)
         .def("getRegisteredProjections", &ob::StateSpace::getRegisteredProjections)
@@ -59,7 +59,7 @@ void ompl::binding::base::init_StateSpace(nb::module_ &m)
         .def("List", &ob::StateSpace::List)
         .def("allocSubspaceStateSampler",
              nb::overload_cast<const ob::StateSpacePtr &>(&ob::StateSpace::allocSubspaceStateSampler, nb::const_),
-             nb::arg("subspace"), nb::rv_policy::reference_internal)
+             nb::arg("subspace"))
         .def("getSubstateAtLocation",
              nb::overload_cast<ob::State *, const ob::StateSpace::SubstateLocation &>(
                  &ob::StateSpace::getSubstateAtLocation, nb::const_),

@@ -97,8 +97,7 @@ void ompl::binding::base::init_ProblemDefinition(nb::module_ &m)
         })
 
         // isStraightLinePathValid returns a path pointer.
-        .def("isStraightLinePathValid", &ompl::base::ProblemDefinition::isStraightLinePathValid,
-             nb::rv_policy::reference_internal)
+        .def("isStraightLinePathValid", &ompl::base::ProblemDefinition::isStraightLinePathValid)
 
         // fixInvalidInputStates
         .def("fixInvalidInputStates", &ompl::base::ProblemDefinition::fixInvalidInputStates)
@@ -109,13 +108,11 @@ void ompl::binding::base::init_ProblemDefinition(nb::module_ &m)
         .def("hasApproximateSolution", &ompl::base::ProblemDefinition::hasApproximateSolution)
         .def("getSolutionDifference", &ompl::base::ProblemDefinition::getSolutionDifference)
         .def("hasOptimizedSolution", &ompl::base::ProblemDefinition::hasOptimizedSolution)
-        .def("getSolutionPath", &ompl::base::ProblemDefinition::getSolutionPath,
-             nb::rv_policy::reference_internal)
+        .def("getSolutionPath", &ompl::base::ProblemDefinition::getSolutionPath)
 
         // getSolution: because the original function fills a PlannerSolution passed by reference,
         // we wrap it so that it returns the solution if one is found.
-        .def("getSolution", &ompl::base::ProblemDefinition::getSolution, 
-             nb::rv_policy::reference_internal)
+        .def("getSolution", &ompl::base::ProblemDefinition::getSolution)
 
         // addSolutionPath overloads.
         .def("addSolutionPath", nb::overload_cast<const ompl::base::PathPtr&, bool, double, const std::string &>
@@ -135,8 +132,7 @@ void ompl::binding::base::init_ProblemDefinition(nb::module_ &m)
         // Proof of non-existence functions.
         .def("hasSolutionNonExistenceProof", &ompl::base::ProblemDefinition::hasSolutionNonExistenceProof)
         .def("clearSolutionNonExistenceProof", &ompl::base::ProblemDefinition::clearSolutionNonExistenceProof)
-        .def("getSolutionNonExistenceProof", &ompl::base::ProblemDefinition::getSolutionNonExistenceProof,
-             nb::rv_policy::reference_internal)
+        .def("getSolutionNonExistenceProof", &ompl::base::ProblemDefinition::getSolutionNonExistenceProof)
         .def("setSolutionNonExistenceProof", &ompl::base::ProblemDefinition::setSolutionNonExistenceProof)
 
         // print: Wrap the print function to output to std::cout.
