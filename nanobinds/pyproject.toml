@@ -12,6 +12,16 @@ name = "ompl"
 dynamic = ["version"]
 requires-python = ">=3.9"
 
+[project.optional-dependencies]
+examples = [
+    "viser",
+    "coal",
+    "pin"
+]
+dev = [
+    "pytest",
+]
+
 [tool.scikit-build]
 minimum-version = "0.4"
 build-dir = "build/{wheel_tag}"

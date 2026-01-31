@@ -34,7 +34,7 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 ######################################################################
 
-# Author: Mark Moll
+# Author: Mark Moll, Weihang Guo
 
 from __future__ import print_function
 try:
@@ -181,13 +181,19 @@ class ConstrainedProblem(object):
         self.ss = og.SimpleSetup(self.csi)
 
     def setStartAndGoalStates(self, start, goal):
+        sstart = self.css.allocState()
+        sgoal = self.css.allocState()
+
+        sstart.copy(start)
+        sgoal.copy(goal)
+
         # Create start and goal states
         if self.spaceType == "AT" or self.spaceType == "TB":
-            self.css.anchorChart(start())
-            self.css.anchorChart(goal())
+            self.css.anchorChart(sstart)
+            self.css.anchorChart(sgoal)
 
         # Setup problem
-        self.ss.setStartAndGoalStates(start, goal)
+        self.ss.setStartAndGoalStates(sstart, sgoal)
 
     def getPlanner(self, plannerName, projectionName=None):
         planner = eval('og.%s(self.csi)' % plannerName)

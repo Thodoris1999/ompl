@@ -34,21 +34,18 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 ######################################################################
 
-# Author: Luis G. Torres, Mark Moll
+# Author: Luis G. Torres, Mark Moll, Weihang Guo
 
 import sys
+
 try:
     from ompl import util as ou
     from ompl import base as ob
     from ompl import geometric as og
 except ImportError:
-    # if the ompl module is not in the PYTHONPATH assume it is installed in a
-    # subdirectory of the parent directory called "py-bindings."
-    from os.path import abspath, dirname, join
-    sys.path.insert(0, join(dirname(dirname(abspath(__file__))), 'py-bindings'))
-    from ompl import util as ou
-    from ompl import base as ob
-    from ompl import geometric as og
+    print("Error: ompl module not found")
+    exit(1)
+
 from math import sqrt
 import argparse
 
@@ -217,13 +214,13 @@ def plan(runTime, plannerType, objectiveType, fname):
 
     # Set our robot's starting state to be the bottom-left corner of
     # the environment, or (0,0).
-    start = ob.State(space)
+    start = space.allocState()
     start[0] = 0.0
     start[1] = 0.0
 
     # Set our robot's goal state to be the top-right corner of the
     # environment, or (1,1).
-    goal = ob.State(space)
+    goal = space.allocState()
     goal[0] = 1.0
     goal[1] = 1.0
 

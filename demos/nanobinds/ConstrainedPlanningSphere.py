@@ -34,7 +34,7 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 ######################################################################
 
-# Author: Mark Moll
+# Author: Mark Moll, Weihang Guo
 
 from __future__ import print_function
 import argparse
@@ -46,7 +46,7 @@ from ConstrainedPlanningCommon import *
 class SphereConstraint(ob.Constraint):
 
     def __init__(self):
-        super(SphereConstraint, self).__init__(3, 1)
+        super().__init__(3, 1)
 
     def function(self, x, out):
         out[0] = np.linalg.norm(x) - 1
@@ -58,11 +58,10 @@ class SphereConstraint(ob.Constraint):
         else:
             out[0, :] = [1, 0, 0]
 
-
 class SphereProjection(ob.ProjectionEvaluator):
 
     def __init__(self, space):
-        super(SphereProjection, self).__init__(space)
+        super().__init__(space)
 
     def getDimension(self):
         return 2
@@ -127,16 +126,12 @@ def spherePlanning(options):
     cp = ConstrainedProblem(options.space, rvss, constraint, options)
     cp.css.registerProjection("sphere", SphereProjection(cp.css))
 
-    start = ob.State(cp.css)
-    goal = ob.State(cp.css)
-    start[0] = 0
-    start[1] = 0
-    start[2] = -1
-    goal[0] = 0
-    goal[1] = 0
-    goal[2] = 1
+    start = [0,0,-1]
+    goal = [0,0,1]
+
+
     cp.setStartAndGoalStates(start, goal)
-    cp.ss.setStateValidityChecker(ob.StateValidityCheckerFn(obstacles))
+    cp.ss.setStateValidityChecker(obstacles)
 
     planners = options.planner.split(",")
     if not options.bench:

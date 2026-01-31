@@ -34,21 +34,15 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 ######################################################################
 
-# Author: Mark Moll
+# Author: Mark Moll, Weihang Guo
 
 try:
     from ompl import util as ou
     from ompl import base as ob
     from ompl import geometric as og
 except ImportError:
-    # if the ompl module is not in the PYTHONPATH assume it is installed in a
-    # subdirectory of the parent directory called "py-bindings."
-    from os.path import abspath, dirname, join
-    import sys
-    sys.path.insert(0, join(dirname(dirname(abspath(__file__))), 'py-bindings'))
-    from ompl import util as ou
-    from ompl import base as ob
-    from ompl import geometric as og
+    print("Error: ompl module not found")
+    exit(1)
 from time import sleep
 from math import fabs
 
@@ -134,16 +128,16 @@ def plan(samplerIndex):
     ss = og.SimpleSetup(space)
 
     # set state validity checking for this space
-    ss.setStateValidityChecker(ob.StateValidityCheckerFn(isStateValid))
+    ss.setStateValidityChecker(isStateValid)
 
     # create a start state
-    start = ob.State(space)
+    start = space.allocState()
     start[0] = 0
     start[1] = 0
     start[2] = 0
 
     # create a goal state
-    goal = ob.State(space)
+    goal = space.allocState()
     goal[0] = 0
     goal[1] = 0
     goal[2] = 1
@@ -155,10 +149,10 @@ def plan(samplerIndex):
     si = ss.getSpaceInformation()
     if samplerIndex == 1:
         # use obstacle-based sampling
-        si.setValidStateSamplerAllocator(ob.ValidStateSamplerAllocator(allocOBValidStateSampler))
+        si.setValidStateSamplerAllocator(allocOBValidStateSampler)
     elif samplerIndex == 2:
         # use my sampler
-        si.setValidStateSamplerAllocator(ob.ValidStateSamplerAllocator(allocMyValidStateSampler))
+        si.setValidStateSamplerAllocator(allocMyValidStateSampler)
 
     # create a planner for the defined space
     planner = og.PRM(si)
