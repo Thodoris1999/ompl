@@ -59,10 +59,10 @@ class MyDecomposition(oc.GridDecomposition):
         s.setXY(coord[0], coord[1])
 ## @endcond
 
-def isStateValid(spaceInformation, state):
+def isStateValid(space, state):
     # perform collision checking or check if other constraints are
     # satisfied
-    return spaceInformation.satisfiesBounds(state)
+    return space.satisfiesBounds(state)
 
 def propagate(start, control, duration, state):
     state.setX(start.getX() + control[0] * duration * cos(start.getYaw()))
@@ -91,7 +91,7 @@ def plan():
     # define a simple setup class
     ss = oc.SimpleSetup(cspace)
     ss.setStateValidityChecker(
-        partial(isStateValid, ss.getSpaceInformation()))
+        partial(isStateValid, space))
     ss.setStatePropagator(propagate)
 
     # create a start state
@@ -123,7 +123,7 @@ def plan():
     si.setPropagationStepSize(.1)
 
     # attempt to solve the problem
-    solved = ss.solve(20.0)
+    solved = ss.solve(1.0)
     if solved == ob.PlannerStatus.EXACT_SOLUTION:
         # print the path to screen
         print("Found solution:\n")
