@@ -91,10 +91,6 @@ set_package_properties(Nanobind PROPERTIES
 if(OMPL_HAVE_PYTHON AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/nanobind/CMakeLists.txt")
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/external/nanobind)
     set(OMPL_HAVE_NANOBIND 1)
-    find_package_handle_standard_args(Nanobind
-        REQUIRED_VARS OMPL_HAVE_NANOBIND
-        VERSION_VAR nanobind_VERSION
-    )
 else()
     set(OMPL_HAVE_NANOBIND 0)
 endif()
