@@ -178,11 +178,6 @@ void ompl::binding::control::init_SimpleSetup(nb::module_ &m)
                 if (self.is_valid()) nb::setattr(self, "_svc", nb::cast(svc));
             },
              nb::arg("svc"))
-        .def("clearStateValidityChecker", [](oc::SimpleSetup &ss) {
-            ss.setStateValidityChecker(ompl::base::StateValidityCheckerPtr(nullptr));
-            nb::object self = nb::find(nb::cast(&ss));
-            if (self.is_valid() && nb::hasattr(self, "_svc")) nb::delattr(self, "_svc");
-        })
         
         // setStatePropagator (Ptr and Fn)
         .def("setStatePropagator",

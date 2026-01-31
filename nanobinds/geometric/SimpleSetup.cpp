@@ -180,11 +180,6 @@ nb::class_<og::SimpleSetup>(m, "SimpleSetup", nb::type_slots(simple_setup_geomet
              if (self.is_valid()) nb::setattr(self, "_svc", nb::cast(svc));
          },
           nb::arg("svc"))
-    .def("clearStateValidityChecker", [](og::SimpleSetup &ss) {
-        ss.setStateValidityChecker(ompl::base::StateValidityCheckerPtr(nullptr));
-        nb::object self = nb::find(nb::cast(&ss));
-        if (self.is_valid() && nb::hasattr(self, "_svc")) nb::delattr(self, "_svc");
-    })
      
      // setOptimizationObjective
      .def("setOptimizationObjective",

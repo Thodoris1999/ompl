@@ -108,13 +108,6 @@ void ompl::binding::base::init_SpaceInformation(nb::module_& m)
                 }
             },
             nb::arg("svc"))
-        .def("clearStateValidityChecker", [](ompl::base::SpaceInformation &si) {
-            si.setStateValidityChecker(ompl::base::StateValidityCheckerPtr(nullptr));
-            nb::object self = nb::find(nb::cast(&si));
-            if (self.is_valid() && nb::hasattr(self, "_svc")) {
-                nb::delattr(self, "_svc");
-            }
-        })
         .def("getStateValidityChecker", &ompl::base::SpaceInformation::getStateValidityChecker)
         .def("setMotionValidator", &ompl::base::SpaceInformation::setMotionValidator)
         .def("getMotionValidator", nb::overload_cast<>(&ompl::base::SpaceInformation::getMotionValidator, nb::const_))
