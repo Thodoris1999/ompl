@@ -17,9 +17,77 @@ namespace nb = nanobind;
 namespace ob = ompl::base;
 namespace oc = ompl::control;
 
+// Helper dictionary access
+static PyObject **get_dict_ptr(PyObject *obj) {
+    return _PyObject_GetDictPtr(obj);
+}
+
+int control_space_information_tp_traverse(PyObject *self, visitproc visit, void *arg) {
+    Py_VISIT(Py_TYPE(self));
+    if (!nb::inst_ready(self)) return 0;
+
+    // 1. Visit __dict__
+    PyObject **dictptr = get_dict_ptr(self);
+    if (dictptr && *dictptr) {
+        Py_VISIT(*dictptr);
+    }
+
+    try {
+        auto *si = nb::inst_ptr<oc::SpaceInformation>(self);
+        if (si) {
+            // Visit Propagator
+            auto prop = si->getStatePropagator();
+            if (prop) {
+                nb::handle h = nb::find(prop);
+                if (h.is_valid()) {
+                    Py_VISIT(h.ptr());
+                } else if (dictptr && *dictptr) {
+                    PyObject *item = PyDict_GetItemString(*dictptr, "_prop");
+                    if (item) Py_VISIT(item);
+                }
+            }
+            // Visit SVC (Base)
+            auto svc = si->getStateValidityChecker();
+            if (svc) {
+                nb::handle h = nb::find(svc);
+                if (h.is_valid()) {
+                    Py_VISIT(h.ptr());
+                } else if (dictptr && *dictptr) {
+                    PyObject *item = PyDict_GetItemString(*dictptr, "_svc");
+                    if (item) Py_VISIT(item);
+                }
+            }
+        }
+    } catch (...) {}
+    return 0;
+}
+
+int control_space_information_tp_clear(PyObject *self) {
+    // 1. Clear __dict__
+    PyObject **dictptr = get_dict_ptr(self);
+    if (dictptr && *dictptr) {
+        Py_CLEAR(*dictptr);
+    }
+    // 2. Break C++ Cycle
+    try {
+        auto *si = nb::inst_ptr<oc::SpaceInformation>(self);
+        if (si) {
+            si->setStatePropagator(oc::StatePropagatorPtr(nullptr));
+            si->setStateValidityChecker(ob::StateValidityCheckerPtr(nullptr));
+        }
+    } catch (...) {}
+    return 0;
+}
+
+PyType_Slot control_space_information_slots[] = {
+    { Py_tp_traverse, (void *) control_space_information_tp_traverse },
+    { Py_tp_clear, (void *) control_space_information_tp_clear },
+    { 0, 0 }
+};
+
 void ompl::binding::control::init_SpaceInformation(nb::module_ &m)
 {
-    nb::class_<oc::SpaceInformation, ob::SpaceInformation>(m, "SpaceInformation")
+    nb::class_<oc::SpaceInformation, ob::SpaceInformation>(m, "SpaceInformation", nb::type_slots(control_space_information_slots), nb::dynamic_attr())
         //
         // Constructor
         //
@@ -64,7 +132,18 @@ void ompl::binding::control::init_SpaceInformation(nb::module_ &m)
 
         // setStatePropagator
         .def("setStatePropagator",
-            nb::overload_cast<const ompl::control::StatePropagatorFn&>(&ompl::control::SpaceInformation::setStatePropagator),
+            [](oc::SpaceInformation &si, const ompl::control::StatePropagatorFn &sp) {
+                si.setStatePropagator(sp);
+                nb::object self = nb::find(nb::cast(&si));
+                if (self.is_valid()) nb::setattr(self, "_prop", nb::cast(sp));
+            },
+             nb::arg("sp"))
+        .def("setStatePropagator",
+            [](oc::SpaceInformation &si, const oc::StatePropagatorPtr &sp) {
+                si.setStatePropagator(sp);
+                nb::object self = nb::find(nb::cast(&si));
+                if (self.is_valid()) nb::setattr(self, "_prop", nb::cast(sp));
+            },
              nb::arg("sp"))
 
         // setPropagationStepSize, getPropagationStepSize

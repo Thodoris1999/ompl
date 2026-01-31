@@ -4,9 +4,9 @@ from ompl import base as ob
 from ompl import control as oc
 import pytest
 
-def isStateValid(space, state):
+def isStateValid(spaceInformation, state):
     # perform collision checking or check if other constraints are satisfied
-    return space.satisfiesBounds(state)
+    return spaceInformation.satisfiesBounds(state)
 
 def propagate(temp1, control, duration, state):
     # For demonstration, intentionally messing up the partial usage
@@ -41,7 +41,7 @@ def test_control_no_planner():
 
     # 5) Provide a state validity checker as a lambda
     # This partial-lambda structure ensures the argument signature matches (State*) -> bool
-    ss.setStateValidityChecker(lambda s: isStateValid(space, s))
+    ss.setStateValidityChecker(lambda s: isStateValid(ss.getSpaceInformation(), s))
     
     # 6) Provide a state propagator
     ss.setStatePropagator(propagate)
@@ -62,12 +62,16 @@ def test_control_no_planner():
 
     # 9) Attempt to solve
     solved = ss.solve(2)
-    
+
     # If solved, optionally retrieve path
     if solved:
         print("Found solution path.")
         path = ss.getSolutionPath()
         path.printAsMatrix()
+
+    del ss
+    import gc
+    gc.collect()
 
 def test_control_rrt():
     # 1) Construct the SE2 state space
@@ -95,7 +99,7 @@ def test_control_rrt():
 
     # 5) Provide a state validity checker as a lambda
     # This partial-lambda structure ensures the argument signature matches (State*) -> bool
-    ss.setStateValidityChecker(lambda s: isStateValid(space, s))
+    ss.setStateValidityChecker(lambda s: isStateValid(ss.getSpaceInformation(), s))
     
     # 6) Provide a state propagator
     ss.setStatePropagator(propagate)
@@ -124,7 +128,3 @@ def test_control_rrt():
         print("Found solution path.")
         path = ss.getSolutionPath()
         path.printAsMatrix()
-
-if __name__ == "__main__":
-    # test_control_no_planner()
-    test_control_rrt()

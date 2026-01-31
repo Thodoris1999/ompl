@@ -22,9 +22,78 @@ struct SimpleSetupPublicist : public og::SimpleSetup {
     using og::SimpleSetup::configured_;
 };
 
+void ompl::binding::geometric::init_SimpleSetup(nb::module_ &m);
+// Helper dictionary access
+static PyObject **get_dict_ptr(PyObject *obj) {
+    return _PyObject_GetDictPtr(obj);
+}
+
+int simple_setup_geometric_tp_traverse(PyObject *self, visitproc visit, void *arg) {
+    Py_VISIT(Py_TYPE(self));
+    if (!nb::inst_ready(self)) return 0;
+
+    // 1. Visit __dict__
+    PyObject **dictptr = get_dict_ptr(self);
+    if (dictptr && *dictptr) {
+        Py_VISIT(*dictptr);
+    }
+
+    try {
+        auto *ss = nb::inst_ptr<og::SimpleSetup>(self);
+        if (ss) {
+            // Visit SpaceInformation
+            auto si = ss->getSpaceInformation();
+            if (si) {
+                 nb::handle h = nb::find(si);
+                 if (h.is_valid()) Py_VISIT(h.ptr());
+            }
+            // Visit ProblemDefinition
+            auto pdef = ss->getProblemDefinition();
+            if (pdef) {
+                 nb::handle h = nb::find(pdef);
+                 if (h.is_valid()) Py_VISIT(h.ptr());
+            }
+            // Visit Planner
+            auto planner = ss->getPlanner();
+            if (planner) {
+                 nb::handle h = nb::find(planner);
+                 if (h.is_valid()) Py_VISIT(h.ptr());
+            }
+            // Visit Callbacks stored in dict (if nb::find fails for them)
+            if (dictptr && *dictptr) {
+                PyObject *svc = PyDict_GetItemString(*dictptr, "_svc");
+                if (svc) Py_VISIT(svc);
+            }
+        }
+    } catch (...) {}
+    return 0;
+}
+
+int simple_setup_geometric_tp_clear(PyObject *self) {
+    // 1. Clear __dict__
+    PyObject **dictptr = get_dict_ptr(self);
+    if (dictptr && *dictptr) {
+        Py_CLEAR(*dictptr);
+    }
+    // 2. Break C++ Cycle
+    try {
+        auto *ss = nb::inst_ptr<og::SimpleSetup>(self);
+        if (ss) {
+             ss->setStateValidityChecker(ompl::base::StateValidityCheckerPtr(nullptr));
+        }
+    } catch (...) {}
+    return 0;
+}
+
+PyType_Slot simple_setup_geometric_slots[] = {
+    { Py_tp_traverse, (void *) simple_setup_geometric_tp_traverse },
+    { Py_tp_clear, (void *) simple_setup_geometric_tp_clear },
+    { 0, 0 }
+};
+
 void ompl::binding::geometric::init_SimpleSetup(nb::module_ &m)
 {
-nb::class_<og::SimpleSetup>(m, "SimpleSetup")
+nb::class_<og::SimpleSetup>(m, "SimpleSetup", nb::type_slots(simple_setup_geometric_slots), nb::dynamic_attr())
      // Constructors
      .def(nb::init<const ob::SpaceInformationPtr &>(),
           nb::arg("si"))
@@ -96,13 +165,26 @@ nb::class_<og::SimpleSetup>(m, "SimpleSetup")
           },
           nb::arg("plannerData"))
      
-     // setStateValidityChecker (two overloads: pointer vs function).
+     // setStateValidityChecker (two overloads)
      .def("setStateValidityChecker",
-          static_cast<void (og::SimpleSetup::*)(const ob::StateValidityCheckerPtr &)>(&og::SimpleSetup::setStateValidityChecker),
+         [](og::SimpleSetup &ss, const ompl::base::StateValidityCheckerFn &svc) {
+             ss.setStateValidityChecker(svc);
+             nb::object self = nb::find(nb::cast(&ss));
+             if (self.is_valid()) nb::setattr(self, "_svc", nb::cast(svc));
+         },
           nb::arg("svc"))
      .def("setStateValidityChecker",
-          static_cast<void (og::SimpleSetup::*)(const ob::StateValidityCheckerFn &)>(&og::SimpleSetup::setStateValidityChecker),
+         [](og::SimpleSetup &ss, const ompl::base::StateValidityCheckerPtr &svc) {
+             ss.setStateValidityChecker(svc);
+             nb::object self = nb::find(nb::cast(&ss));
+             if (self.is_valid()) nb::setattr(self, "_svc", nb::cast(svc));
+         },
           nb::arg("svc"))
+    .def("clearStateValidityChecker", [](og::SimpleSetup &ss) {
+        ss.setStateValidityChecker(ompl::base::StateValidityCheckerPtr(nullptr));
+        nb::object self = nb::find(nb::cast(&ss));
+        if (self.is_valid() && nb::hasattr(self, "_svc")) nb::delattr(self, "_svc");
+    })
      
      // setOptimizationObjective
      .def("setOptimizationObjective",
