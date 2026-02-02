@@ -92,12 +92,8 @@ void ompl::binding::base::init_Planner(nb::module_ &m)
     nb::class_<ob::Planner, PyPlanner /* <-- trampoline */>(m, "Planner")
         // Constructors
         .def(nb::init<ob::SpaceInformationPtr, std::string>())
-        .def(
-            "getSpaceInformation", [](ob::Planner &p) -> ob::SpaceInformationPtr { return p.getSpaceInformation(); },
-            nb::rv_policy::reference_internal)
-        .def("getProblemDefinition",
-             static_cast<ob::ProblemDefinitionPtr &(ob::Planner::*)()>(&ob::Planner::getProblemDefinition),
-             nb::rv_policy::reference_internal)
+        .def("getSpaceInformation", [](ob::Planner &p) -> ob::SpaceInformationPtr { return p.getSpaceInformation(); })
+        .def("getProblemDefinition", static_cast<ob::ProblemDefinitionPtr &(ob::Planner::*)()>(&ob::Planner::getProblemDefinition))
         .def("setProblemDefinition", &ob::Planner::setProblemDefinition, nb::arg("pdef"))
         .def ("getPlannerInputStates", &ob::Planner::getPlannerInputStates,
               nb::rv_policy::reference_internal)
@@ -112,8 +108,6 @@ void ompl::binding::base::init_Planner(nb::module_ &m)
         .def("setName", &ob::Planner::setName, nb::arg("name"))
         .def("getSpecs", &ob::Planner::getSpecs, nb::rv_policy::reference_internal)
         .def("params", static_cast<ob::ParamSet &(ob::Planner::*)()>(&ob::Planner::params),
-             nb::rv_policy::reference_internal)
-        .def("paramsConst", static_cast<const ob::ParamSet &(ob::Planner::*)() const>(&ob::Planner::params),
              nb::rv_policy::reference_internal)
         .def("getPlannerProgressProperties", &ob::Planner::getPlannerProgressProperties,
              nb::rv_policy::reference_internal);
