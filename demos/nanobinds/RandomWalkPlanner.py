@@ -65,7 +65,9 @@ class RandomWalkPlanner(ob.Planner):
         approxsol = 0
         approxdif = 1e6
         while not ptc():
+            print("1")
             rstate = si.allocState()
+            print(rstate)
             # pick a random state in the state space
             self.sampler_.sampleUniform(rstate)
             # check motion
@@ -80,6 +82,11 @@ class RandomWalkPlanner(ob.Planner):
                 if dist < approxdif:
                     approxdif = dist
                     approxsol = len(self.states_)
+            else:
+                print("gon free")
+                si.freeState(rstate)
+                print("freed")
+        print("after")
         solved = False
         approximate = False
         if not solution:
@@ -95,6 +102,10 @@ class RandomWalkPlanner(ob.Planner):
 
     def clear(self):
         super(RandomWalkPlanner, self).clear()
+        print("cleaning")
+        si = self.getSpaceInformation()
+        #for st in self.states_:
+        #    si.freeState(st)
         self.states_ = []
 
 ## @endcond
@@ -137,6 +148,7 @@ def plan():
         ss.simplifySolution()
         # print the simplified path
         print(ss.getSolutionPath())
+        ss.clear()
 
 
 if __name__ == "__main__":
