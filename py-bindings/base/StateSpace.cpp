@@ -7,6 +7,7 @@
 #include "ompl/base/StateSpace.h"
 #include <sstream>
 #include "init.h"
+#include "validation.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;
@@ -39,6 +40,8 @@ void ompl::binding::base::init_StateSpace(nb::module_ &m)
         .def("getValueAddressAtIndex",
              nb::overload_cast<ob::State *, unsigned int>(&ob::StateSpace::getValueAddressAtIndex, nb::const_),
              nb::arg("state"), nb::arg("index"), nb::rv_policy::reference_internal)
+
+        .def("computeLocations", &ob::StateSpace::computeLocations)
 
         .def("registerProjection", &ob::StateSpace::registerProjection, nb::arg("name"), nb::arg("projection"))
         .def("registerDefaultProjection", &ob::StateSpace::registerDefaultProjection, nb::arg("projection"))
@@ -78,7 +81,14 @@ void ompl::binding::base::init_StateSpace(nb::module_ &m)
                  &ob::StateSpace::getCommonSubspaces, nb::const_),
              nb::arg("other"), nb::arg("subspaces"))
         .def("copyToReals", &ob::StateSpace::copyToReals, nb::arg("reals"), nb::arg("source"))
-        .def("copyFromReals", &ob::StateSpace::copyFromReals, nb::arg("destination"), nb::arg("reals"));
+        .def(
+            "copyFromReals",
+            [](const ob::StateSpace &ss, ob::State *destination, const std::vector<double> &reals)
+            {
+                checkRealsSize(ss, reals, "copyFromReals");
+                ss.copyFromReals(destination, reals);
+            },
+            nb::arg("destination"), nb::arg("reals"));
 
     nb::class_<ob::CompoundStateSpace, ob::StateSpace>(m, "CompoundStateSpace")
         .def(nb::init<>())

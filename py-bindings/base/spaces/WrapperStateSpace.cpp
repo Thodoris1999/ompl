@@ -1,5 +1,6 @@
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/shared_ptr.h>
+#include <nanobind/stl/vector.h>
 #include <nanobind/eigen/dense.h>
 #include "ompl/base/spaces/WrapperStateSpace.h"
 #include "ompl/base/StateSampler.h"
@@ -7,6 +8,7 @@
 #include "ompl/base/StateSpace.h"
 
 #include "../init.h"
+#include "../validation.h"
 
 namespace nb = nanobind;
 namespace ob = ompl::base;
@@ -98,7 +100,14 @@ void ompl::binding::base::initSpaces_WrapperStateSpace(nb::module_ &m)
                                                                  nb::const_),
              nb::arg("state"), nb::arg("name"))
         .def("copyToReals", &ob::WrapperStateSpace::copyToReals, nb::arg("reals"), nb::arg("source"))
-        .def("copyFromReals", &ob::WrapperStateSpace::copyFromReals, nb::arg("dest"), nb::arg("reals"))
+        .def(
+            "copyFromReals",
+            [](const ob::WrapperStateSpace &ss, ob::State *dest, const std::vector<double> &reals)
+            {
+                checkRealsSize(ss, reals, "copyFromReals");
+                ss.copyFromReals(dest, reals);
+            },
+            nb::arg("dest"), nb::arg("reals"))
         .def("registerProjections", &ob::WrapperStateSpace::registerProjections)
         .def("printState", &ob::WrapperStateSpace::printState, nb::arg("state"), nb::arg("out"))
         .def("printSettings", &ob::WrapperStateSpace::printSettings, nb::arg("out"))
