@@ -99,7 +99,15 @@ void ompl::binding::base::initSpaces_WrapperStateSpace(nb::module_ &m)
              nb::overload_cast<ob::State *, const std::string &>(&ob::WrapperStateSpace::getValueAddressAtName,
                                                                  nb::const_),
              nb::arg("state"), nb::arg("name"))
-        .def("copyToReals", &ob::WrapperStateSpace::copyToReals, nb::arg("reals"), nb::arg("source"))
+        .def(
+            "copyToReals",
+            [](const ob::WrapperStateSpace &ss, const ob::State *source)
+            {
+                std::vector<double> reals;
+                ss.copyToReals(reals, source);
+                return reals;
+            },
+            nb::arg("source"))
         .def(
             "copyFromReals",
             [](const ob::WrapperStateSpace &ss, ob::State *dest, const std::vector<double> &reals)

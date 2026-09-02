@@ -80,7 +80,18 @@ void ompl::binding::base::init_StateSpace(nb::module_ &m)
              nb::overload_cast<const ob::StateSpacePtr &, std::vector<std::string> &>(
                  &ob::StateSpace::getCommonSubspaces, nb::const_),
              nb::arg("other"), nb::arg("subspaces"))
-        .def("copyToReals", &ob::StateSpace::copyToReals, nb::arg("reals"), nb::arg("source"))
+        // Returns [] if setup() (or computeLocations()) has not been called yet. We cannot validate for this like
+        // copyFromReals because a zero-dimensional space like EmptyStateSpace returns [] too, and the two are
+        // indistinguishable
+        .def(
+            "copyToReals",
+            [](const ob::StateSpace &ss, const ob::State *source)
+            {
+                std::vector<double> reals;
+                ss.copyToReals(reals, source);
+                return reals;
+            },
+            nb::arg("source"))
         .def(
             "copyFromReals",
             [](const ob::StateSpace &ss, ob::State *destination, const std::vector<double> &reals)
